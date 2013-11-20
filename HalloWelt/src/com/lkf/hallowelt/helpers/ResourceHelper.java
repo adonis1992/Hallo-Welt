@@ -8,11 +8,5 @@ public class ResourceHelper
 {
 	//Application Resource
 	public static String externalStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath()
-			+ File.separator + "HalloWelt" + File.separator;;
-	
-	public static void applicationLoad()
-	{
-		externalStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath()
-				+ File.separator + "HalloWelt" + File.separator;
-	}
+			+ File.separator + "HalloWelt" + File.separator;
 }
