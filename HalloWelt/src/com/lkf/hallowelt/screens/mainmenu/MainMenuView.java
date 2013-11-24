@@ -1,14 +1,10 @@
 package com.lkf.hallowelt.screens.mainmenu;
 
-import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
-import static android.opengl.GLES20.glClear;
-
 import java.io.IOException;
 
 import com.lkf.hallowelt.controllers.MainMenuController;
 import com.lkf.lib.base.LKFController;
 import com.lkf.lib.base.LKFScreen;
-import com.lkf.lib.physics.Vector2D;
 import com.lkf.lib.render.SpriteBatcher;
 import com.lkf.lib.render.Texture;
 import com.lkf.lib.render.TextureRegion;
@@ -17,7 +13,7 @@ public class MainMenuView extends LKFScreen
 {
 	//Base members.
 	private final MainMenuController theController;
-	private Vector2D theTouchPosition;
+//	private Vector2D theTouchPosition;
 	private SpriteBatcher theBatcher;
 	
 	//Pictures
@@ -34,6 +30,8 @@ public class MainMenuView extends LKFScreen
 		super(); 
 		// TODO Auto-generated constructor stub
 		theController = (MainMenuController) controller;
+//		theTouchPosition = new Vector2D();
+		theBatcher = new SpriteBatcher(2, controller, 360, 640);
 		
 		//Flag init.
 		textureInit = true;
@@ -50,7 +48,17 @@ public class MainMenuView extends LKFScreen
 	public void present(float deltaTime)
 	{
 		// TODO Auto-generated method stub
-		glClear(GL_COLOR_BUFFER_BIT);
+		theController.cameraInit();
+		theController.rotateInSceneXY(0);
+		theController.textureRenderInit();
+		
+		theController.moveInSceneXY(0, 0);
+		theBatcher.beginBatch(theBackgroundAtlas);
+		theBatcher.drawBackground();
+		theBatcher.endBatch();
+/*		theBatcher.beginBatch(theComponentsAtlas);
+		theBatcher.drawSprite(100, 100, 128, 207, theWindow);
+		theBatcher.endBatch();*/
 		
 		theCounter.logFrame();
 	}
