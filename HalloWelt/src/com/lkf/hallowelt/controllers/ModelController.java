@@ -15,14 +15,14 @@ public abstract class ModelController extends LKFController
 	protected InputStream readFile(String filePath) throws IOException
 	{
 		// TODO Auto-generated method stub
-		return new FileInputStream(ResourceHelper.externalStoragePath + filePath);
+		return new FileInputStream(ResourceHelper.EXTERNAL_STORAGE_PATH + filePath);
 	}
 
 	@Override
 	protected OutputStream writeFile(String filePath) throws IOException
 	{
 		// TODO Auto-generated method stub
-		return new FileOutputStream(ResourceHelper.externalStoragePath + filePath);
+		return new FileOutputStream(ResourceHelper.EXTERNAL_STORAGE_PATH + filePath);
 	}
 
 }

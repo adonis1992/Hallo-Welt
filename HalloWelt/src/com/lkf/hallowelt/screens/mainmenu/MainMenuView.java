@@ -18,7 +18,6 @@ public class MainMenuView extends LKFScreen
 	
 	//Pictures
 	private Texture theBackgroundAtlas;
-	private TextureRegion theBackground;
 	private Texture theComponentsAtlas;
 	private TextureRegion theWindow;
 	
@@ -48,11 +47,8 @@ public class MainMenuView extends LKFScreen
 	public void present(float deltaTime)
 	{
 		// TODO Auto-generated method stub
-		theController.cameraInit();
-		theController.rotateInSceneXY(0);
 		theController.textureRenderInit();
 		
-		theController.moveInSceneXY(0, 0);
 		theBatcher.beginBatch(theBackgroundAtlas);
 		theBatcher.drawBackground();
 		theBatcher.endBatch();
@@ -87,9 +83,6 @@ public class MainMenuView extends LKFScreen
 		
 		if (textureInit)
 		{
-			TextureRegion.textureLoad(theBackgroundAtlas);
-			theBackground = TextureRegion.getFullTextureRegion();
-			TextureRegion.dispose();
 			TextureRegion.textureLoad(theComponentsAtlas);
 			theWindow = TextureRegion.getFullTextureRegion();
 			TextureRegion.dispose();
