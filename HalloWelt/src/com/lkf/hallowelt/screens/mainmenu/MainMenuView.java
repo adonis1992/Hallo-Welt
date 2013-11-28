@@ -7,6 +7,7 @@ import static android.opengl.GLES20.glBlendFunc;
 import static android.opengl.GLES20.glEnable;
 
 import java.io.IOException;
+import java.util.Map;
 
 import com.lkf.hallowelt.controllers.MainMenuController;
 import com.lkf.lib.base.LKFController;
@@ -30,6 +31,8 @@ public class MainMenuView extends LKFScreen
 	
 	//Communicate Member
 	private Sprite theWindow;
+	private Sprite theMap;
+	private Sprite theBookcase;
 	
 	//Flags
 	private boolean textureInit;
@@ -41,7 +44,9 @@ public class MainMenuView extends LKFScreen
 		theController = (MainMenuController) controller;
 //		theTouchPosition = new Vector2D();
 		theBatcher = new SpriteBatcher(2, controller, 360, 640);
-		theWindow = new Sprite(new Rectangle2D(100, 100, 128, 207));
+		theWindow = new Sprite(new Rectangle2D(10, 333, 130, 207));
+		theMap = new Sprite(new Rectangle2D(170, 470, 170, 120));
+		theBookcase = new Sprite(new Rectangle2D(160, 50, 200, 380));
 		
 		//Flag init.
 		textureInit = true;
@@ -66,6 +71,8 @@ public class MainMenuView extends LKFScreen
 		alphaRenderInit();
 		theBatcher.beginBatch(theComponentsAtlas);
 		theBatcher.drawSprite(theWindow);
+		theBatcher.drawSprite(theMap);
+		theBatcher.drawSprite(theBookcase);
 		theBatcher.endBatch();
 		
 		theCounter.logFrame();
@@ -85,7 +92,7 @@ public class MainMenuView extends LKFScreen
 		try
 		{
 			theBackgroundAtlas = new Texture(theController.readAssetFile("background.png"));
-			theComponentsAtlas = new Texture(theController.readAssetFile("window.png"));
+			theComponentsAtlas = new Texture(theController.readAssetFile("mainview.png"));
 		}
 		catch (IOException e)
 		{
@@ -96,7 +103,9 @@ public class MainMenuView extends LKFScreen
 		if (textureInit)
 		{
 			TextureRegion.textureLoad(theComponentsAtlas);
-			theWindow.setTexture(TextureRegion.getFullTextureRegion());
+			theWindow.setTexture(new TextureRegion(10, 100, 130, 207));
+			theMap.setTexture(new TextureRegion(170, 50, 170, 120));
+			theBookcase.setTexture(new TextureRegion(160, 210, 200, 380));
 			TextureRegion.dispose();
 			
 			textureInit = false;
