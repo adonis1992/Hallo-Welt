@@ -1,11 +1,5 @@
 package com.lkf.hallowelt.screens.mainmenu;
 
-import static android.opengl.GLES20.GL_BLEND;
-import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
-import static android.opengl.GLES20.GL_SRC_ALPHA;
-import static android.opengl.GLES20.glBlendFunc;
-import static android.opengl.GLES20.glEnable;
-
 import java.io.IOException;
 
 import com.lkf.hallowelt.controllers.MainMenuController;
