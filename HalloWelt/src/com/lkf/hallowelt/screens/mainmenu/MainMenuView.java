@@ -1,8 +1,6 @@
 package com.lkf.hallowelt.screens.mainmenu;
 
 import java.io.IOException;
-import java.util.Map;
-
 import com.lkf.hallowelt.controllers.MainMenuController;
 import com.lkf.lib.base.LKFController;
 import com.lkf.lib.base.LKFScreen;
@@ -37,7 +35,7 @@ public class MainMenuView extends LKFScreen
 		// TODO Auto-generated constructor stub
 		theController = (MainMenuController) controller;
 //		theTouchPosition = new Vector2D();
-		theBatcher = new SpriteBatcher(2, controller, 360, 640);
+		theBatcher = new SpriteBatcher(5, controller, 360, 640);
 		theWindow = new Sprite(new Rectangle2D(10, 333, 130, 207));
 		theMap = new Sprite(new Rectangle2D(170, 470, 170, 120));
 		theBookcase = new Sprite(new Rectangle2D(160, 50, 200, 380));
@@ -85,8 +83,8 @@ public class MainMenuView extends LKFScreen
 		// TODO Auto-generated method stub
 		try
 		{
-			theBackgroundAtlas = new Texture(theController.readAssetFile("background.png"));
-			theComponentsAtlas = new Texture(theController.readAssetFile("mainview.png"));
+			theBackgroundAtlas = new Texture(theController.readAssetFile("RoomBackground.png"));
+			theComponentsAtlas = new Texture(theController.readAssetFile("MainMenuView.png"));
 		}
 		catch (IOException e)
 		{
