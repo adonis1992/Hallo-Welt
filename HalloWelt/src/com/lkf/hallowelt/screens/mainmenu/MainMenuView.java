@@ -1,10 +1,18 @@
 package com.lkf.hallowelt.screens.mainmenu;
 
+import static android.opengl.GLES20.GL_BLEND;
+import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
+import static android.opengl.GLES20.GL_SRC_ALPHA;
+import static android.opengl.GLES20.glBlendFunc;
+import static android.opengl.GLES20.glEnable;
+
 import java.io.IOException;
 
 import com.lkf.hallowelt.controllers.MainMenuController;
 import com.lkf.lib.base.LKFController;
 import com.lkf.lib.base.LKFScreen;
+import com.lkf.lib.physics.Rectangle2D;
+import com.lkf.lib.render.Sprite;
 import com.lkf.lib.render.SpriteBatcher;
 import com.lkf.lib.render.Texture;
 import com.lkf.lib.render.TextureRegion;
@@ -19,7 +27,9 @@ public class MainMenuView extends LKFScreen
 	//Pictures
 	private Texture theBackgroundAtlas;
 	private Texture theComponentsAtlas;
-	private TextureRegion theWindow;
+	
+	//Communicate Member
+	private Sprite theWindow;
 	
 	//Flags
 	private boolean textureInit;
@@ -31,6 +41,7 @@ public class MainMenuView extends LKFScreen
 		theController = (MainMenuController) controller;
 //		theTouchPosition = new Vector2D();
 		theBatcher = new SpriteBatcher(2, controller, 360, 640);
+		theWindow = new Sprite(new Rectangle2D(100, 100, 128, 207));
 		
 		//Flag init.
 		textureInit = true;
@@ -52,9 +63,10 @@ public class MainMenuView extends LKFScreen
 		theBatcher.beginBatch(theBackgroundAtlas);
 		theBatcher.drawBackground();
 		theBatcher.endBatch();
-/*		theBatcher.beginBatch(theComponentsAtlas);
-		theBatcher.drawSprite(100, 100, 128, 207, theWindow);
-		theBatcher.endBatch();*/
+		alphaRenderInit();
+		theBatcher.beginBatch(theComponentsAtlas);
+		theBatcher.drawSprite(theWindow);
+		theBatcher.endBatch();
 		
 		theCounter.logFrame();
 	}
@@ -84,7 +96,7 @@ public class MainMenuView extends LKFScreen
 		if (textureInit)
 		{
 			TextureRegion.textureLoad(theComponentsAtlas);
-			theWindow = TextureRegion.getFullTextureRegion();
+			theWindow.setTexture(TextureRegion.getFullTextureRegion());
 			TextureRegion.dispose();
 			
 			textureInit = false;
