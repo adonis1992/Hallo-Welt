@@ -1,9 +1,14 @@
 package com.lkf.hallowelt.screens.mainmenu;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import com.lkf.hallowelt.controllers.MainMenuController;
+import com.lkf.hallowelt.helpers.ResourceHelper;
 import com.lkf.lib.base.LKFController;
 import com.lkf.lib.base.LKFScreen;
+import com.lkf.lib.base.framework.InputBase.LKFKeyEvent;
+import com.lkf.lib.base.framework.InputBase.LKFTouchEvent;
 import com.lkf.lib.physics.Rectangle2D;
 import com.lkf.lib.render.Sprite;
 import com.lkf.lib.render.SpriteBatcher;
@@ -14,7 +19,6 @@ public class MainMenuView extends LKFScreen
 {
 	//Base members.
 	private final MainMenuController theController;
-//	private Vector2D theTouchPosition;
 	private SpriteBatcher theBatcher;
 	
 	//Pictures
@@ -31,10 +35,9 @@ public class MainMenuView extends LKFScreen
 	
 	public MainMenuView(LKFController controller)
 	{
-		super(); 
+		super(ResourceHelper.COORDINATE_HELPER.width / 2, ResourceHelper.COORDINATE_HELPER.height / 2); 
 		// TODO Auto-generated constructor stub
 		theController = (MainMenuController) controller;
-//		theTouchPosition = new Vector2D();
 		theBatcher = new SpriteBatcher(5, controller, 360, 640);
 		theWindow = new Sprite(new Rectangle2D(10, 333, 130, 207));
 		theMap = new Sprite(new Rectangle2D(170, 470, 170, 120));
@@ -43,12 +46,20 @@ public class MainMenuView extends LKFScreen
 		//Flag init.
 		textureInit = true;
 	}
-
+	
 	@Override
-	public void update(float deltaTime)
+	protected void touchExecute(ArrayList<LKFTouchEvent> events,
+			int numberOfFinger)
 	{
 		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	protected void keyPressExecute(ArrayList<LKFKeyEvent> events)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -66,8 +77,6 @@ public class MainMenuView extends LKFScreen
 		theBatcher.drawSprite(theMap);
 		theBatcher.drawSprite(theBookcase);
 		theBatcher.endBatch();
-		
-		theCounter.logFrame();
 	}
 
 	@Override
@@ -110,5 +119,10 @@ public class MainMenuView extends LKFScreen
 		// TODO Auto-generated method stub
 
 	}
-
+	
+	@Override
+	protected LKFController getController()
+	{
+		return theController;
+	}
 }
