@@ -1,15 +1,17 @@
 package com.lkf.hallowelt.screens.mainmenu;
 
 import java.io.IOException;
-import java.util.ArrayList;
+
+import android.util.Log;
 
 import com.lkf.hallowelt.controllers.MainMenuController;
-import com.lkf.hallowelt.helpers.ResourceHelper;
 import com.lkf.lib.base.LKFController;
 import com.lkf.lib.base.LKFScreen;
 import com.lkf.lib.base.framework.InputBase.LKFKeyEvent;
 import com.lkf.lib.base.framework.InputBase.LKFTouchEvent;
+import com.lkf.lib.physics.Plane3D;
 import com.lkf.lib.physics.Rectangle2D;
+import com.lkf.lib.physics.Vector3D;
 import com.lkf.lib.render.Sprite;
 import com.lkf.lib.render.SpriteBatcher;
 import com.lkf.lib.render.Texture;
@@ -20,6 +22,7 @@ public class MainMenuView extends LKFScreen
 	//Base members.
 	private final MainMenuController theController;
 	private SpriteBatcher theBatcher;
+	private Plane3D thePlane;
 	
 	//Pictures
 	private Texture theBackgroundAtlas;
@@ -33,11 +36,13 @@ public class MainMenuView extends LKFScreen
 	//Flags
 	private boolean textureInit;
 	
-	public MainMenuView(LKFController controller)
+	public MainMenuView(LKFController controller, float width, float height)
 	{
-		super(ResourceHelper.COORDINATE_HELPER.width / 2, ResourceHelper.COORDINATE_HELPER.height / 2); 
+		super(width, height); 
 		// TODO Auto-generated constructor stub
 		theController = (MainMenuController) controller;
+		thePlane = new Plane3D(new Vector3D(0, 0, 0), new Vector3D(0, 1, 0));
+		
 		theBatcher = new SpriteBatcher(5, controller, 360, 640);
 		theWindow = new Sprite(new Rectangle2D(10, 333, 130, 207));
 		theMap = new Sprite(new Rectangle2D(170, 470, 170, 120));
@@ -46,20 +51,38 @@ public class MainMenuView extends LKFScreen
 		//Flag init.
 		textureInit = true;
 	}
-	
+
 	@Override
-	protected void touchExecute(ArrayList<LKFTouchEvent> events,
-			int numberOfFinger)
+	protected void touchDownExecute(LKFTouchEvent event)
+	{
+		// TODO Auto-generated method stub
+		test(event.pointer);
+	}
+
+	@Override
+	protected void touchMoveExecute(LKFTouchEvent event)
+	{
+		// TODO Auto-generated method stub
+		test(event.pointer);
+	}
+
+	@Override
+	protected void touchUpExecute(LKFTouchEvent event)
 	{
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void keyPressExecute(ArrayList<LKFKeyEvent> events)
+	protected void keyPressExecute(LKFKeyEvent event)
 	{
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private void test(int fingerID)
+	{
+		Log.v("hehe", theController.getFinger(fingerID).getPosition().x + "  " + theController.getFinger(fingerID).getPosition().y);
 	}
 
 	@Override
@@ -124,5 +147,12 @@ public class MainMenuView extends LKFScreen
 	protected LKFController getController()
 	{
 		return theController;
+	}
+
+	@Override
+	protected Plane3D getPlane()
+	{
+		// TODO Auto-generated method stub
+		return thePlane;
 	}
 }

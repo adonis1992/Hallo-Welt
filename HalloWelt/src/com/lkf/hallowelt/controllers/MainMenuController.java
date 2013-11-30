@@ -12,7 +12,7 @@ public class MainMenuController extends ModelController
 	public LKFScreen getStartScreen()
 	{
 		// TODO Auto-generated method stub
-		return new MainMenuView(this);
+		return new MainMenuView(this, 360, 640);
 	}
 	
 	@Override
