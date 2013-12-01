@@ -29,6 +29,7 @@ public class MainMenuView extends LKFScreen
 	private Sprite theWindow;
 	private Sprite theMap;
 	private Sprite theBookcase;
+	private Sprite theSetting;
 	
 	//Flags
 	private boolean textureInit;
@@ -39,9 +40,10 @@ public class MainMenuView extends LKFScreen
 		// TODO Auto-generated constructor stub
 		theController = (MainMenuController) controller;
 		theBatcher = new SpriteBatcher(5, controller, 360, 640);
-		theWindow = new Sprite(new Rectangle2D(10, 333, 130, 207));
-		theMap = new Sprite(new Rectangle2D(170, 470, 170, 120));
-		theBookcase = new Sprite(new Rectangle2D(160, 50, 200, 380));
+		theWindow = new Sprite(new Rectangle2D(0, 285, 130, 205));
+		theMap = new Sprite(new Rectangle2D(160, 520, 168, 120));
+		theBookcase = new Sprite(new Rectangle2D(160, 60, 200, 380));
+        theSetting = new Sprite(new Rectangle2D(0, 104, 136, 136));
 		
 		//Flag init.
 		textureInit = true;
@@ -76,6 +78,7 @@ public class MainMenuView extends LKFScreen
 		theBatcher.drawSprite(theWindow);
 		theBatcher.drawSprite(theMap);
 		theBatcher.drawSprite(theBookcase);
+		theBatcher.drawSprite(theSetting);
 		theBatcher.endBatch();
 	}
 
@@ -104,9 +107,10 @@ public class MainMenuView extends LKFScreen
 		if (textureInit)
 		{
 			TextureRegion.textureLoad(theComponentsAtlas);
-			theWindow.setTexture(new TextureRegion(10, 100, 130, 207));
-			theMap.setTexture(new TextureRegion(170, 50, 170, 120));
-			theBookcase.setTexture(new TextureRegion(160, 210, 200, 380));
+			theWindow.setTexture(new TextureRegion(0, 150, 130, 205));
+			theMap.setTexture(new TextureRegion(160, 0, 168, 120));
+			theBookcase.setTexture(new TextureRegion(160, 200, 200, 380));
+            theSetting.setTexture(new TextureRegion(0, 400, 136, 136));
 			TextureRegion.dispose();
 			
 			textureInit = false;
