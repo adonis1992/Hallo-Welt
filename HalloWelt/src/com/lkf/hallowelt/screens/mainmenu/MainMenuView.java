@@ -2,16 +2,16 @@ package com.lkf.hallowelt.screens.mainmenu;
 
 import java.io.IOException;
 
-import android.util.Log;
+import android.view.KeyEvent;
+
 import com.lkf.hallowelt.controllers.MainMenuController;
-import com.lkf.hallowelt.helpers.ResourceHelper;
 import com.lkf.lib.base.LKFController;
 import com.lkf.lib.base.LKFScreen;
 import com.lkf.lib.base.framework.InputBase.LKFKeyEvent;
-import com.lkf.lib.base.framework.InputBase.LKFTouchEvent;
-import com.lkf.lib.physics.Plane3D;
+import com.lkf.lib.base.framework.InputBase.LKFKeyEvent.KeyState;
+import com.lkf.lib.helpers.FingerHelper;
 import com.lkf.lib.physics.Rectangle2D;
-import com.lkf.lib.physics.Vector3D;
+import com.lkf.lib.physics.Vector2D;
 import com.lkf.lib.render.Sprite;
 import com.lkf.lib.render.SpriteBatcher;
 import com.lkf.lib.render.Texture;
@@ -22,7 +22,6 @@ public class MainMenuView extends LKFScreen
 	//Base members.
 	private final MainMenuController theController;
 	private SpriteBatcher theBatcher;
-	private Plane3D thePlane;
 	
 	//Pictures
 	private Texture theBackgroundAtlas;
@@ -37,16 +36,15 @@ public class MainMenuView extends LKFScreen
 	//Flags
 	private boolean textureInit;
 	
-	public MainMenuView(LKFController controller, float width, float height)
+	public MainMenuView(LKFController controller, float width, float height, float focalLength)
 	{
-		super(width, height); 
+		super(width, height, focalLength); 
 		// TODO Auto-generated constructor stub
 		theController = (MainMenuController) controller;
-		thePlane = new Plane3D(new Vector3D(0, 0, 0), new Vector3D(0, 1, 0));
 		
 		theBatcher = new SpriteBatcher(5, controller, 360, 640);
 		theWindow = new Sprite(new Rectangle2D(0, 285, 130, 205));
-		theMap = new Sprite(new Rectangle2D(160, 520, 168, 120));
+		theMap = new Sprite(new Rectangle2D(160, 500, 168, 120));
 		theBookcase = new Sprite(new Rectangle2D(160, 60, 200, 380));
         theSetting = new Sprite(new Rectangle2D(0, 104, 136, 136));
 		
@@ -55,34 +53,36 @@ public class MainMenuView extends LKFScreen
 	}
 
 	@Override
-	protected void touchDownExecute(LKFTouchEvent event)
+	protected void touchDownExecute(FingerHelper finger)
 	{
 		// TODO Auto-generated method stub
-		test(event.pointer);
 	}
 
 	@Override
-	protected void touchMoveExecute(LKFTouchEvent event)
+	protected void touchMoveExecute(FingerHelper finger)
 	{
 		// TODO Auto-generated method stub
-		test(event.pointer);
 	}
 
 	@Override
-	protected void touchUpExecute(LKFTouchEvent event)
+	protected void touchUpExecute(FingerHelper finger)
 	{
 		// TODO Auto-generated method stub
-		if (theWindow.touchCheck(theController.getFinger(event.pointer).getPosition()))
+		if (theWindow.touchCheck(finger.getPosition()))
 		{
-			theController.cameraSet(ResourceHelper.COORDINATE_HELPER.getCoordinateX(theWindow.getPosition().getCenterX()), ResourceHelper.COORDINATE_HELPER.getCoordinateY(theWindow.getPosition().getCenterY()), ResourceHelper.COORDINATE_HELPER.focalLenth * theWindow.getPosition().width / width);
+			moveCamera(theWindow.getPosition().getCenter(), theWindow.getPosition().width);
 		}
-		else if (theMap.touchCheck(theController.getFinger(event.pointer).getPosition()))
+		else if (theMap.touchCheck(finger.getPosition()))
 		{
-			theController.cameraSet(ResourceHelper.COORDINATE_HELPER.getCoordinateX(theMap.getPosition().getCenterX()), ResourceHelper.COORDINATE_HELPER.getCoordinateY(theMap.getPosition().getCenterY()), ResourceHelper.COORDINATE_HELPER.focalLenth * theMap.getPosition().width / width);
+			moveCamera(theMap.getPosition().getCenter(), theMap.getPosition().width);
 		}
-		else if (theBookcase.touchCheck(theController.getFinger(event.pointer).getPosition()))
+		else if (theBookcase.touchCheck(finger.getPosition()))
 		{
-			theController.cameraSet(ResourceHelper.COORDINATE_HELPER.getCoordinateX(theBookcase.getPosition().getCenterX()), ResourceHelper.COORDINATE_HELPER.getCoordinateY(theBookcase.getPosition().getCenterY()), ResourceHelper.COORDINATE_HELPER.focalLenth * theBookcase.getPosition().width / width);
+			moveCamera(theBookcase.getPosition().getCenter(), theBookcase.getPosition().width);
+		}
+		else if (theSetting.touchCheck(finger.getPosition()))
+		{
+			moveCamera(theSetting.getPosition().getCenter(), theSetting.getPosition().width);
 		}
 	}
 
@@ -90,11 +90,24 @@ public class MainMenuView extends LKFScreen
 	protected void keyPressExecute(LKFKeyEvent event)
 	{
 		// TODO Auto-generated method stub
-	}
-	
-	private void test(int fingerID)
-	{
-		Log.v("hehe", theController.getFinger(fingerID).getPosition().x + "  " + theController.getFinger(fingerID).getPosition().y);
+		if (event.type == KeyState.KEY_UP)
+		{
+			switch (event.keyCode)
+			{
+			case KeyEvent.KEYCODE_BACK:
+			{
+				moveCamera(new Vector2D(worldWidth / 2, worldHeight / 2), worldWidth);
+				break;
+			}
+			case KeyEvent.KEYCODE_MENU:
+			{
+				theController.finish();
+				break;
+			}
+			default:
+				break;
+			}
+		}
 	}
 
 	@Override
@@ -102,6 +115,7 @@ public class MainMenuView extends LKFScreen
 	{
 		// TODO Auto-generated method stub
 		theController.textureRenderInit();
+		matrixInit();
 		
 		theBatcher.beginBatch(theBackgroundAtlas);
 		theBatcher.drawBackground();
@@ -161,12 +175,5 @@ public class MainMenuView extends LKFScreen
 	protected LKFController getController()
 	{
 		return theController;
-	}
-
-	@Override
-	protected Plane3D getPlane()
-	{
-		// TODO Auto-generated method stub
-		return thePlane;
 	}
 }
