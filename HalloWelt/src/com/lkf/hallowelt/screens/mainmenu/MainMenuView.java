@@ -45,8 +45,8 @@ public class MainMenuView extends LKFScreen
 		thePlane = new Plane3D(new Vector3D(0, 0, 0), new Vector3D(0, 1, 0));
 		
 		theBatcher = new SpriteBatcher(5, controller, 360, 640);
-		theWindow = new Sprite(new Rectangle2D(10, 333, 130, 205));
-		theMap = new Sprite(new Rectangle2D(170, 470, 168, 120));
+		theWindow = new Sprite(new Rectangle2D(0, 285, 130, 205));
+		theMap = new Sprite(new Rectangle2D(160, 520, 168, 120));
 		theBookcase = new Sprite(new Rectangle2D(160, 60, 200, 380));
         theSetting = new Sprite(new Rectangle2D(0, 104, 136, 136));
 		
@@ -140,8 +140,8 @@ public class MainMenuView extends LKFScreen
 		if (textureInit)
 		{
 			TextureRegion.textureLoad(theComponentsAtlas);
-			theWindow.setTexture(new TextureRegion(10, 100, 130, 205));
-			theMap.setTexture(new TextureRegion(170, 50, 168, 120));
+			theWindow.setTexture(new TextureRegion(0, 150, 130, 205));
+			theMap.setTexture(new TextureRegion(160, 0, 168, 120));
 			theBookcase.setTexture(new TextureRegion(160, 200, 200, 380));
             theSetting.setTexture(new TextureRegion(0, 400, 136, 136));
 			TextureRegion.dispose();
