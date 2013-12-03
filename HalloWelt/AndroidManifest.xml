@@ -5,10 +5,13 @@
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="18" />
     
     <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -18,6 +21,12 @@
         
         <activity 
             android:name="com.lkf.hallowelt.controllers.MainMenuController"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboard|keyboardHidden|orientation">
+            
+        </activity>
+        <activity 
+            android:name="com.lkf.hallowelt.controllers.CameraController"
             android:screenOrientation="portrait"
             android:configChanges="keyboard|keyboardHidden|orientation">
             <intent-filter>

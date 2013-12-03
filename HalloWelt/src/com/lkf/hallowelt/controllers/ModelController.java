@@ -8,6 +8,7 @@ import java.io.OutputStream;
 
 import com.lkf.hallowelt.helpers.ResourceHelper;
 import com.lkf.lib.base.LKFController;
+import com.lkf.lib.helpers.CoordinateHelper;
 
 public abstract class ModelController extends LKFController
 {
@@ -25,4 +26,9 @@ public abstract class ModelController extends LKFController
 		return new FileOutputStream(ResourceHelper.EXTERNAL_STORAGE_PATH + filePath);
 	}
 
+	@Override
+	public CoordinateHelper getCoordinateHelper()
+	{
+		return ResourceHelper.COORDINATE_HELPER;
+	}
 }
