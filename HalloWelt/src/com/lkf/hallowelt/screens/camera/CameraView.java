@@ -19,7 +19,7 @@ import com.lkf.lib.render.TextureRegion;
 public class CameraView extends LKFScreen
 {
 	//Base Members.
-	private final LKFController theController;
+	private final CameraController theController;
 	private SpriteBatcher theBatcher;
 	
 	//Pictures 
@@ -28,7 +28,7 @@ public class CameraView extends LKFScreen
 	//Communicate Members
 	private Sprite test;
 	
-	public CameraView(LKFController controller, float width, float height, float focalLength)
+	public CameraView(CameraController controller, float width, float height, float focalLength)
 	{
 		super(width, height, focalLength); 
 		// TODO Auto-generated constructor stub
