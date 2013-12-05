@@ -3,6 +3,7 @@ package com.lkf.hallowelt.controllers;
 import java.io.IOException;
 import java.util.List;
 
+import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
@@ -36,9 +37,13 @@ public class CameraController extends ModelController implements SurfaceTextureL
 		//Camera init
 		theCameraPreviewView = new TextureView(this);
 		theCameraPreviewView.setSurfaceTextureListener(this);
-		theCameraPreviewView.setAlpha(0.5f);
+//		theCameraPreviewView.setAlpha(0.5f);
 		
 		addContentView(theCameraPreviewView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		
+		getSurfaceView().getHolder().setFormat(PixelFormat.TRANSPARENT);
+//		setEGLContextFactory( new ContextFactory() );
+		getSurfaceView().setZOrderOnTop(true);
 	}
 	
 	public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) 
