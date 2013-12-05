@@ -56,7 +56,10 @@ public class CameraView extends LKFScreen
 	protected void touchUpExecute(FingerHelper finger)
 	{
 		// TODO Auto-generated method stub
-
+		if (test.touchCheck(finger.getPosition()))
+		{
+			moveCamera(test.getPosition().getCenter(), test.getPosition().width, 50);
+		}
 	}
 
 	@Override

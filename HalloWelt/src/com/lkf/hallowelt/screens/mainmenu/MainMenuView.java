@@ -33,6 +33,8 @@ public class MainMenuView extends LKFScreen
 	private Sprite theBookcase;
 	private Sprite theSetting;
 	
+	private int delay = 50;
+	
 	public MainMenuView(MainMenuController controller, float width, float height, float focalLength)
 	{
 		super(width, height, focalLength); 
@@ -64,19 +66,19 @@ public class MainMenuView extends LKFScreen
 		// TODO Auto-generated method stub
 		if (theWindow.touchCheck(finger.getPosition()))
 		{
-			moveCamera(theWindow.getPosition().getCenter(), theWindow.getPosition().width, 300);
+			moveCamera(theWindow.getPosition().getCenter(), theWindow.getPosition().width, delay);
 		}
 		else if (theMap.touchCheck(finger.getPosition()))
 		{
-			moveCamera(theMap.getPosition().getCenter(), theMap.getPosition().width, 300);
+			moveCamera(theMap.getPosition().getCenter(), theMap.getPosition().width, delay);
 		}
 		else if (theBookcase.touchCheck(finger.getPosition()))
 		{
-			moveCamera(theBookcase.getPosition().getCenter(), theBookcase.getPosition().width, 300);
+			moveCamera(theBookcase.getPosition().getCenter(), theBookcase.getPosition().width, delay);
 		}
 		else if (theSetting.touchCheck(finger.getPosition()))
 		{
-			moveCamera(theSetting.getPosition().getCenter(), theSetting.getPosition().width, 300);
+			moveCamera(theSetting.getPosition().getCenter(), theSetting.getPosition().width, delay);
 		}
 	}
 
@@ -90,7 +92,7 @@ public class MainMenuView extends LKFScreen
 			{
 			case KeyEvent.KEYCODE_BACK:
 			{
-				moveCamera(new Vector2D(worldWidth / 2, worldHeight / 2), worldWidth, 300);
+				moveCamera(new Vector2D(worldWidth / 2, worldHeight / 2), worldWidth, delay);
 				break;
 			}
 			case KeyEvent.KEYCODE_MENU:
