@@ -80,7 +80,13 @@ public class ScreenPen
 	
 	private void getT(Vector2D circleCenter)
 	{
-		theParameters[0] = (getXParameters()[0] * getXParameters()[1]) * 2;
+		theParameters[0] = (getXParameters()[0] * getXParameters()[0]) + (getYParameters()[0] * getYParameters()[0]) - 4 - (2 * getXParameters()[0] * circleCenter.x) - (2 * getYParameters()[0] * circleCenter.y) + (circleCenter.x * circleCenter.x) + (circleCenter.y *circleCenter.y);
+		theParameters[1] = (2 * getXParameters()[0] * getXParameters()[1]) + (2 * getYParameters()[0] *getYParameters()[1]) - (2 * getXParameters()[1] * circleCenter.x) - (2 * getYParameters()[1] * circleCenter.y);
+		theParameters[2] = (getXParameters()[1] * getXParameters()[1]) + (getYParameters()[1] * getYParameters()[1]) + (2 * getXParameters()[0] * getXParameters()[2]) + (2 * getYParameters()[0] * getYParameters()[2]) - (2 * getXParameters()[2] * circleCenter.x) - (2 * getYParameters()[2] * circleCenter.y);
+		theParameters[3] = (2 * getXParameters()[0] * getXParameters()[3]) + (2 * getYParameters()[0] * getYParameters()[3]) + (2 * getXParameters()[1] * getXParameters()[2]) + (2 * getYParameters()[1] * getYParameters()[2]) - (2 * getXParameters()[3] * circleCenter.x) - (2 * getYParameters()[3] * circleCenter.y);
+		theParameters[4] = (getXParameters()[2] * getXParameters()[2]) + (getYParameters()[2] * getYParameters()[2]) + (2 * getXParameters()[1] * getXParameters()[3]) + (2 * getYParameters()[1] * getYParameters()[3]);
+		theParameters[5] = (2 * getXParameters()[2] * getXParameters()[3]) + (2 * getYParameters()[2] * getYParameters()[3]);
+		theParameters[6] = (getXParameters()[3] * getXParameters()[3]) + (getYParameters()[3] * getYParameters()[3]);
 	}
 	
 	public void exec(Vector2D touch)
