@@ -38,10 +38,10 @@ public class CameraView extends LKFScreen
 		theController = controller;
 		
 		theBatcher = new SpriteBatcher(5, controller);
-		theBack = new Sprite(new Rectangle2D(0, 127, 360, 73));
+		theBack = new Sprite(new Rectangle2D(0, 0, 360, 73));
 		theFilter = new Sprite(new Rectangle2D(20, 8, 56, 57));
-		theCamera = new Sprite(new Rectangle2D(100, 5, 76, 60));
-		thePencil = new Sprite(new Rectangle2D(200, 9, 56, 56));
+		theCamera = new Sprite(new Rectangle2D(140, 5, 76, 60));
+		thePencil = new Sprite(new Rectangle2D(285, 9, 56, 56));
 	}
 
 	@Override
@@ -104,10 +104,10 @@ public class CameraView extends LKFScreen
 	{
 		// TODO Auto-generated method stub
 		TextureRegion.textureLoad(theComponentsAtlas);
-		theBack.setTexture(new TextureRegion(0, 567, 360, 73));
-		theFilter.setTexture(new TextureRegion(20, 575, 56, 57));
-		theCamera.setTexture(new TextureRegion(140, 575, 76, 60));
-		thePencil.setTexture(new TextureRegion(285, 575, 56, 56));
+		theBack.setTexture(new TextureRegion(0, 0, 360, 73));
+		theFilter.setTexture(new TextureRegion(20, 135, 56, 57));
+		theCamera.setTexture(new TextureRegion(100, 135, 76, 60));
+		thePencil.setTexture(new TextureRegion(200, 135, 56, 56));
 		TextureRegion.dispose();
 	}
 
