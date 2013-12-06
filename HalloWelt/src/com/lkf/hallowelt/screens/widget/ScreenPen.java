@@ -9,6 +9,7 @@ import android.util.SparseArray;
 
 import com.lkf.lib.helpers.FingerHelper;
 import com.lkf.lib.physics.BezierLine2D;
+import com.lkf.lib.physics.LKFMath;
 import com.lkf.lib.physics.Vector2D;
 
 public class ScreenPen
@@ -33,6 +34,8 @@ public class ScreenPen
 	private ArrayList<Vector2D> thePoints;
 	private float[] theParameters;
 	
+	private Vector2D currentPoint;
+	
 	private Vector2D first = null;
 	private Vector2D second = null;
 	private Vector2D third = null;
@@ -41,6 +44,8 @@ public class ScreenPen
 	private ScreenPen()
 	{
 		thePoints = new ArrayList<Vector2D>();
+		currentPoint = new Vector2D();
+		
 		theParameters = new float[7];
 	}
 	
@@ -78,7 +83,7 @@ public class ScreenPen
 		return false;
 	}
 	
-	private void getT(Vector2D circleCenter)
+	private float getT(Vector2D circleCenter)
 	{
 		theParameters[0] = (getXParameters()[0] * getXParameters()[0]) + (getYParameters()[0] * getYParameters()[0]) - 4 - (2 * getXParameters()[0] * circleCenter.x) - (2 * getYParameters()[0] * circleCenter.y) + (circleCenter.x * circleCenter.x) + (circleCenter.y *circleCenter.y);
 		theParameters[1] = (2 * getXParameters()[0] * getXParameters()[1]) + (2 * getYParameters()[0] *getYParameters()[1]) - (2 * getXParameters()[1] * circleCenter.x) - (2 * getYParameters()[1] * circleCenter.y);
@@ -87,6 +92,7 @@ public class ScreenPen
 		theParameters[4] = (getXParameters()[2] * getXParameters()[2]) + (getYParameters()[2] * getYParameters()[2]) + (2 * getXParameters()[1] * getXParameters()[3]) + (2 * getYParameters()[1] * getYParameters()[3]);
 		theParameters[5] = (2 * getXParameters()[2] * getXParameters()[3]) + (2 * getYParameters()[2] * getYParameters()[3]);
 		theParameters[6] = (getXParameters()[3] * getXParameters()[3]) + (getYParameters()[3] * getYParameters()[3]);
+		return LKFMath.getXInSix(theParameters);
 	}
 	
 	public void exec(Vector2D touch)
@@ -95,5 +101,7 @@ public class ScreenPen
 		{
 			BezierLine2D.setBezierPoint(first, second, third, forth);
 		}
+		float t = getT(currentPoint);
+		thePoints.add(new Vector2D(BezierLine2D.getPointX(t), BezierLine2D.getPointY(t)));
 	}
 }
