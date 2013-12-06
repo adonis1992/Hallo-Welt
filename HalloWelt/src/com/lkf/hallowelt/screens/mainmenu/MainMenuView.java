@@ -41,7 +41,7 @@ public class MainMenuView extends LKFScreen
 		// TODO Auto-generated constructor stub
 		theController = controller;
 		
-		theBatcher = new SpriteBatcher(5, controller, 360, 640);
+		theBatcher = new SpriteBatcher(5, controller);
 		theWindow = new Sprite(new Rectangle2D(0, 285, 130, 205));
 		theMap = new Sprite(new Rectangle2D(160, 500, 168, 120));
 		theBookcase = new Sprite(new Rectangle2D(160, 60, 200, 380));

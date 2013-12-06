@@ -26,7 +26,10 @@ public class CameraView extends LKFScreen
 	private Texture theComponentsAtlas;
 	
 	//Communicate Members
-	private Sprite test;
+	private Sprite theBack;
+	private Sprite theFilter;
+	private Sprite theCamera;
+	private Sprite thePencil;
 	
 	public CameraView(CameraController controller, float width, float height, float focalLength)
 	{
@@ -34,8 +37,11 @@ public class CameraView extends LKFScreen
 		// TODO Auto-generated constructor stub
 		theController = controller;
 		
-		theBatcher = new SpriteBatcher(5, controller, 360, 640);
-		test = new Sprite(new Rectangle2D(0, 285, 130, 205));
+		theBatcher = new SpriteBatcher(5, controller);
+		theBack = new Sprite(new Rectangle2D(0, 127, 360, 73));
+		theFilter = new Sprite(new Rectangle2D(20, 8, 56, 57));
+		theCamera = new Sprite(new Rectangle2D(100, 5, 76, 60));
+		thePencil = new Sprite(new Rectangle2D(200, 9, 56, 56));
 	}
 
 	@Override
@@ -56,10 +62,7 @@ public class CameraView extends LKFScreen
 	protected void touchUpExecute(FingerHelper finger)
 	{
 		// TODO Auto-generated method stub
-		if (test.touchCheck(finger.getPosition()))
-		{
-			moveCamera(test.getPosition().getCenter(), test.getPosition().width, 50);
-		}
+
 	}
 
 	@Override
@@ -87,7 +90,7 @@ public class CameraView extends LKFScreen
 		// TODO Auto-generated method stub
 		try
 		{
-			theComponentsAtlas = new Texture(theController.readAssetFile("MainMenuView.png"));
+			theComponentsAtlas = new Texture(theController.readAssetFile("Camera.png"));
 		}
 		catch (IOException e)
 		{
@@ -101,7 +104,10 @@ public class CameraView extends LKFScreen
 	{
 		// TODO Auto-generated method stub
 		TextureRegion.textureLoad(theComponentsAtlas);
-		test.setTexture(new TextureRegion(0, 150, 130, 205));
+		theBack.setTexture(new TextureRegion(0, 73, 360, 73));
+		theFilter.setTexture(new TextureRegion(20, 575, 56, 57));
+		theCamera.setTexture(new TextureRegion(140, 575, 76, 60));
+		thePencil.setTexture(new TextureRegion(285, 575, 56, 56));
 		TextureRegion.dispose();
 	}
 
@@ -114,7 +120,10 @@ public class CameraView extends LKFScreen
 		
 		alphaRenderInit();
 		theBatcher.beginBatch(theComponentsAtlas);
-		theBatcher.drawSprite(test);
+		theBatcher.drawSprite(theBack);
+		theBatcher.drawSprite(theFilter);
+		theBatcher.drawSprite(theCamera);
+		theBatcher.drawSprite(thePencil);
 		theBatcher.endBatch();
 	}
 
