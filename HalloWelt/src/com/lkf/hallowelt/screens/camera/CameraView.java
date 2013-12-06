@@ -104,7 +104,7 @@ public class CameraView extends LKFScreen
 	{
 		// TODO Auto-generated method stub
 		TextureRegion.textureLoad(theComponentsAtlas);
-		theBack.setTexture(new TextureRegion(0, 73, 360, 73));
+		theBack.setTexture(new TextureRegion(0, 567, 360, 73));
 		theFilter.setTexture(new TextureRegion(20, 575, 56, 57));
 		theCamera.setTexture(new TextureRegion(140, 575, 76, 60));
 		thePencil.setTexture(new TextureRegion(285, 575, 56, 56));
