@@ -125,6 +125,7 @@ public class CameraView extends LKFScreen
 		theBatcher.drawSprite(theCamera);
 		theBatcher.drawSprite(thePencil);
 		theBatcher.endBatch();
+		
 	}
 
 	@Override
