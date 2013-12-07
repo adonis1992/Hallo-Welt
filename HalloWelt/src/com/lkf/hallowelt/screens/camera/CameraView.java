@@ -2,7 +2,6 @@ package com.lkf.hallowelt.screens.camera;
 
 import java.io.IOException;
 
-import android.R.string;
 import android.view.KeyEvent;
 
 import com.lkf.hallowelt.controllers.CameraController;

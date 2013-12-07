@@ -184,11 +184,11 @@ public class ScreenPen
 						BezierLine2D.setBezierPoint(first, second, third, forth);
 					}
 					
-					float t;
+					float t = 0;
 					
 					while (currentPoint.copy().sub(third).length() > 2 )
 					{
-						t = getT(currentPoint);
+//						t = getT(currentPoint);
 						onLinePoint = new Vector2D(BezierLine2D.getPointX(t), BezierLine2D.getPointY(t));
 						thePoints.add(onLinePoint);
 						Log.v("hehe", t+"");
