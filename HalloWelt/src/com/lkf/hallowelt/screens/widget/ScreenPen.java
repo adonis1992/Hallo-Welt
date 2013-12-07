@@ -165,20 +165,9 @@ public class ScreenPen
 					
 					while (currentPoint.copy().sub(second).length() > 2)
 					{
-						Log.v("hehe1", currentPoint.x + " " + currentPoint.y);
-						Log.v("hehe1", second.x + " " + second.y);
 						onLinePoint = new Vector2D(second.copy().sub(currentPoint).mul((float) 2 / lineLength).add(currentPoint));
 						thePoints.add(onLinePoint);
 						currentPoint = onLinePoint;
-						Log.v("hehe2", currentPoint.x + " " + currentPoint.y);
-						try
-						{
-							Thread.sleep(1000);
-						} catch (InterruptedException e)
-						{
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 					}
 				}
 				else
@@ -199,7 +188,17 @@ public class ScreenPen
 						t = getT(currentPoint);
 						onLinePoint = new Vector2D(BezierLine2D.getPointX(t), BezierLine2D.getPointY(t));
 						thePoints.add(onLinePoint);
+						Log.v("hehe", currentPoint.x + " " + currentPoint.y);
 						currentPoint = onLinePoint;
+						Log.v("hehe", currentPoint.x + " " + currentPoint.y);
+						try
+						{
+							Thread.sleep(1000);
+						} catch (InterruptedException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 			}	
