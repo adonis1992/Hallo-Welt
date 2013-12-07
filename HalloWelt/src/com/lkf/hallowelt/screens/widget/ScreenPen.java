@@ -64,12 +64,14 @@ public class ScreenPen
 	}
 	
 	private ArrayList<Vector2D> thePoints;
-	private float[] theParameters;
+//	private float[] theParameters;
 	
 	public PenState state;
 	
 	private Vector2D currentPoint;
 	private Vector2D onLinePoint;
+	
+	private float lineT;
 	
 	private Vector2D first = null;
 	private Vector2D second = null;
@@ -82,7 +84,7 @@ public class ScreenPen
 		
 		state = PenState.Normal;
 		
-		theParameters = new float[7];
+//		theParameters = new float[7];
 	}
 	
 	private boolean addPoints(Vector2D touchPosition)
@@ -141,7 +143,8 @@ public class ScreenPen
 		return false;
 	}
 	
-	private float getT(Vector2D circleCenter)
+	//我很没志气地放弃治疗了 T_T
+/*	private float getT(Vector2D circleCenter) 
 	{
 		theParameters[0] = (getXParameters()[0] * getXParameters()[0]) + (getYParameters()[0] * getYParameters()[0]) - 4 - (2 * getXParameters()[0] * circleCenter.x) - (2 * getYParameters()[0] * circleCenter.y) + (circleCenter.x * circleCenter.x) + (circleCenter.y *circleCenter.y);
 		theParameters[1] = (2 * getXParameters()[0] * getXParameters()[1]) + (2 * getYParameters()[0] *getYParameters()[1]) - (2 * getXParameters()[1] * circleCenter.x) - (2 * getYParameters()[1] * circleCenter.y);
@@ -151,7 +154,7 @@ public class ScreenPen
 		theParameters[5] = (2 * getXParameters()[2] * getXParameters()[3]) + (2 * getYParameters()[2] * getYParameters()[3]);
 		theParameters[6] = (getXParameters()[3] * getXParameters()[3]) + (getYParameters()[3] * getYParameters()[3]);
 		return LKFMath.getXInSix(theParameters);
-	}
+	}*/
 	
 	public void process(Vector2D touch)
 	{
@@ -188,9 +191,9 @@ public class ScreenPen
 						t = getT(currentPoint);
 						onLinePoint = new Vector2D(BezierLine2D.getPointX(t), BezierLine2D.getPointY(t));
 						thePoints.add(onLinePoint);
+						Log.v("hehe", t+"");
 						Log.v("hehe", currentPoint.x + " " + currentPoint.y);
 						currentPoint = onLinePoint;
-						Log.v("hehe", currentPoint.x + " " + currentPoint.y);
 						try
 						{
 							Thread.sleep(1000);
