@@ -5,6 +5,7 @@ import java.io.IOException;
 import android.view.KeyEvent;
 
 import com.lkf.hallowelt.controllers.CameraController;
+import com.lkf.hallowelt.screens.widget.ScreenPen;
 import com.lkf.lib.base.LKFController;
 import com.lkf.lib.base.LKFScreen;
 import com.lkf.lib.base.framework.InputBase.LKFKeyEvent;
@@ -48,21 +49,21 @@ public class CameraView extends LKFScreen
 	protected void touchDownExecute(FingerHelper finger)
 	{
 		// TODO Auto-generated method stub
-
+		ScreenPen.initLine(finger);
 	}
 
 	@Override
 	protected void touchMoveExecute(FingerHelper finger)
 	{
 		// TODO Auto-generated method stub
-
+		ScreenPen.move(finger);
 	}
 
 	@Override
 	protected void touchUpExecute(FingerHelper finger)
 	{
 		// TODO Auto-generated method stub
-
+		ScreenPen.endLine(finger);
 	}
 
 	@Override
@@ -115,8 +116,8 @@ public class CameraView extends LKFScreen
 	public void present(float deltaTime)
 	{
 		// TODO Auto-generated method stub
-		theController.textureRenderInit();
 		matrixInit();
+		theController.textureRenderInit();
 		
 		alphaRenderInit();
 		theBatcher.beginBatch(theComponentsAtlas);
