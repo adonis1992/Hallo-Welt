@@ -81,6 +81,7 @@ public class ScreenPen
 	private ScreenPen()
 	{
 		thePoints = new ArrayList<Vector2D>();
+		lineT = 1;
 		
 		state = PenState.Normal;
 		
@@ -169,6 +170,7 @@ public class ScreenPen
 					while (currentPoint.copy().sub(second).length() > 2)
 					{
 						onLinePoint = new Vector2D(second.copy().sub(currentPoint).mul((float) 2 / lineLength).add(currentPoint));
+						lineT = 
 						thePoints.add(onLinePoint);
 						currentPoint = onLinePoint;
 					}
