@@ -83,6 +83,7 @@ public class CameraView extends LKFScreen
 	{
 		// TODO Auto-generated method stub
 		ScreenPen.endLine(finger);
+		ScreenPen.killLine(finger);
 	}
 
 	@Override

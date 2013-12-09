@@ -1,8 +1,5 @@
 package com.lkf.hallowelt.screens.widget;
 
-import static com.lkf.lib.physics.BezierLine2D.getXParameters;
-import static com.lkf.lib.physics.BezierLine2D.getYParameters;
-
 import java.util.ArrayList;
 
 import android.util.Log;
@@ -12,7 +9,6 @@ import com.lkf.lib.base.Pool;
 import com.lkf.lib.base.Pool.PoolFactory;
 import com.lkf.lib.helpers.FingerHelper;
 import com.lkf.lib.physics.BezierLine2D;
-import com.lkf.lib.physics.LKFMath;
 import com.lkf.lib.physics.Vector2D;
 
 public class ScreenPen
@@ -21,6 +17,8 @@ public class ScreenPen
 	{
 		Init, Normal, ReBuild, Dead
 	}
+	
+	private float interval = 2f;
 	
 	private static Pool<ScreenPen> thePenPool;
 	private static SparseArray<ScreenPen> thePens = new SparseArray<ScreenPen>();
@@ -81,7 +79,7 @@ public class ScreenPen
 	private ScreenPen()
 	{
 		thePoints = new ArrayList<Vector2D>();
-		lineT = 1;
+		lineT = 2;
 		
 		state = PenState.Normal;
 		
@@ -98,7 +96,7 @@ public class ScreenPen
 		}
 		else if (second == null)
 		{
-			if (touchPosition.copy().sub(first).length() > 1)
+			if (touchPosition.copy().sub(first).length() > 1f)
 			{
 				second = new Vector2D(touchPosition);
 				return true;
@@ -110,7 +108,7 @@ public class ScreenPen
 		}
 		else if (third == null) 
 		{
-			if (touchPosition.copy().sub(second).length() > 1)
+			if (touchPosition.copy().sub(second).length() > 1f)
 			{
 				third = new Vector2D(touchPosition);
 				return true;
@@ -122,7 +120,7 @@ public class ScreenPen
 		}
 		else if (forth == null)
 		{
-			if (touchPosition.copy().sub(third).length() > 1)
+			if (touchPosition.copy().sub(third).length() > 1f)
 			{
 				forth = new Vector2D(touchPosition);
 				return true;
@@ -132,7 +130,7 @@ public class ScreenPen
 				return false;
 			}
 		}
-		else if (touchPosition.copy().sub(forth).length() > 1)
+		else if (touchPosition.copy().sub(forth).length() > 1f)
 		{
 			first.set(second);
 			second.set(third);
@@ -166,13 +164,16 @@ public class ScreenPen
 				if (third == null)
 				{
 					float lineLength = second.copy().sub(currentPoint).length();
+					lineT = lineLength;
 					
-					while (currentPoint.copy().sub(second).length() > 2)
+					Vector2D cutLine = second.copy().sub(currentPoint).mul(interval / lineLength);
+					
+					while (lineT > interval)
 					{
-						onLinePoint = new Vector2D(second.copy().sub(currentPoint).mul((float) 2 / lineLength).add(currentPoint));
-						lineT = 
+						onLinePoint = currentPoint.copy().add(cutLine);
 						thePoints.add(onLinePoint);
 						currentPoint = onLinePoint;
+						lineT -= interval;
 					}
 				}
 				else
@@ -186,24 +187,20 @@ public class ScreenPen
 						BezierLine2D.setBezierPoint(first, second, third, forth);
 					}
 					
-					float t = 0;
+					float lineLength = third.copy().sub(second).length();
 					
-					while (currentPoint.copy().sub(third).length() > 2 )
+					float t = (interval - lineT) / lineLength;
+					
+					lineT = lineLength - lineT; 
+					while (lineT > interval)
 					{
-//						t = getT(currentPoint);
 						onLinePoint = new Vector2D(BezierLine2D.getPointX(t), BezierLine2D.getPointY(t));
 						thePoints.add(onLinePoint);
 						Log.v("hehe", t+"");
 						Log.v("hehe", currentPoint.x + " " + currentPoint.y);
 						currentPoint = onLinePoint;
-						try
-						{
-							Thread.sleep(1000);
-						} catch (InterruptedException e)
-						{
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						lineT -= interval;
+						t = (lineLength - lineT) / lineLength;
 					}
 				}
 			}	
