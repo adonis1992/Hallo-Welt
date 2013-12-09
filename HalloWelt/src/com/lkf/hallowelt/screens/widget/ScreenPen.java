@@ -1,6 +1,7 @@
 package com.lkf.hallowelt.screens.widget;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import android.util.Log;
 import android.util.SparseArray;
@@ -10,18 +11,21 @@ import com.lkf.lib.base.Pool.PoolFactory;
 import com.lkf.lib.helpers.FingerHelper;
 import com.lkf.lib.physics.BezierLine2D;
 import com.lkf.lib.physics.Vector2D;
+import com.lkf.lib.render.ColorBatcher;
 
 public class ScreenPen
 {	
-	private static enum PenState
+/*	private static enum PenState
 	{
 		Init, Normal, ReBuild, Dead
-	}
+	}*/
 	
 	private float interval = 2f;
 	
-	private static Pool<ScreenPen> thePenPool;
-	private static SparseArray<ScreenPen> thePens = new SparseArray<ScreenPen>();
+	private static Pool<ScreenPen> PenPool;
+	private static Set<Integer> deleteIDs;
+	private static Set<Integer> IDs;
+	private static SparseArray<ScreenPen> Pens = new SparseArray<ScreenPen>();
 	
 	static
 	{
@@ -35,55 +39,85 @@ public class ScreenPen
 			}
 		};
 		
-		thePenPool = new Pool<ScreenPen>(factory, 20);
+		PenPool = new Pool<ScreenPen>(factory, 20);
 	}
 	
 	public static void initLine(FingerHelper finger)
 	{
-		thePens.put(finger.getID(), thePenPool.newObject());
-		thePens.get(finger.getID()).process(finger.getPosition());
+		IDs.add(finger.getID());
+		Pens.put(finger.getID(), PenPool.newObject());
+		Pens.get(finger.getID()).process(finger.getPosition());
 	}
 	
 	public static void move(FingerHelper finger)
 	{
-		thePens.get(finger.getID()).process(finger.getPosition());
+		Pens.get(finger.getID()).process(finger.getPosition());
 	}
 	
 	public static void endLine(FingerHelper finger)
 	{
-		thePens.get(finger.getID()).process(finger.getPosition());
-		thePens.get(finger.getID()).state = PenState.Dead;
+		Pens.get(finger.getID()).process(finger.getPosition());
+//		Pens.get(finger.getID()).state = PenState.Dead;
+		deleteIDs.add(finger.getID());
 	}
 	
-	public static void killLine(FingerHelper finger)
+	public static void killLine()
 	{
-		thePenPool.free(thePens.get(finger.getID()));
-		thePens.remove(finger.getID());
+		if (deleteIDs.size() > 0)
+		{
+			for (Integer penID : deleteIDs)
+			{
+				Pens.get(penID).init();
+				PenPool.free(Pens.get(penID));
+				Pens.remove(penID);
+				IDs.remove(penID);
+			}
+		}
+	}
+	
+	public static void draw(ColorBatcher theColorBatcher)
+	{
+		if (IDs.size() > 0)
+		{
+			for (Integer penID : IDs)
+			{
+				theColorBatcher.draw(Pens.get(penID).thePoints);
+			}
+		}
 	}
 	
 	private ArrayList<Vector2D> thePoints;
 //	private float[] theParameters;
 	
-	public PenState state;
+//	private PenState state;
 	
 	private Vector2D currentPoint;
 	private Vector2D onLinePoint;
 	
 	private float lineT;
 	
-	private Vector2D first = null;
-	private Vector2D second = null;
-	private Vector2D third = null;
-	private Vector2D forth = null;
+	private Vector2D first;
+	private Vector2D second;
+	private Vector2D third;
+	private Vector2D forth;
 	
 	private ScreenPen()
 	{
 		thePoints = new ArrayList<Vector2D>();
-		lineT = 2;
+		init();
 		
-		state = PenState.Normal;
+//		state = PenState.Normal;
 		
 //		theParameters = new float[7];
+	}
+	
+	private void init()
+	{
+		lineT = 2;
+		first = null;
+		second = null;
+		third = null;
+		forth = null;
 	}
 	
 	private boolean addPoints(Vector2D touchPosition)

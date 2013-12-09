@@ -12,6 +12,7 @@ import com.lkf.lib.base.framework.InputBase.LKFKeyEvent;
 import com.lkf.lib.base.framework.InputBase.LKFKeyEvent.KeyState;
 import com.lkf.lib.helpers.FingerHelper;
 import com.lkf.lib.physics.Rectangle2D;
+import com.lkf.lib.render.ColorBatcher;
 import com.lkf.lib.render.Sprite;
 import com.lkf.lib.render.SpriteBatcher;
 import com.lkf.lib.render.Texture;
@@ -22,6 +23,7 @@ public class CameraView extends LKFScreen
 	//Base Members.
 	private final CameraController theController;
 	private SpriteBatcher theBatcher;
+	private ColorBatcher theColorBatcher;
 	
 	//Pictures 
 	private Texture theComponentsAtlas;
@@ -62,6 +64,8 @@ public class CameraView extends LKFScreen
 		theYellow = new Sprite(new Rectangle2D(190, 95, 20, 20));
 		theBlue = new Sprite(new Rectangle2D(230, 95, 20, 20));
 		theGreen = new Sprite(new Rectangle2D(270, 95, 20, 20));
+		
+		theColorBatcher = new ColorBatcher(controller);
 	}
 
 	@Override
@@ -83,7 +87,6 @@ public class CameraView extends LKFScreen
 	{
 		// TODO Auto-generated method stub
 		ScreenPen.endLine(finger);
-		ScreenPen.killLine(finger);
 	}
 
 	@Override
@@ -150,6 +153,7 @@ public class CameraView extends LKFScreen
 		// TODO Auto-generated method stub
 		matrixInit();
 		theController.textureRenderInit();
+		theController.colorRenderInit();
 		
 		alphaRenderInit();
 		theBatcher.beginBatch(theComponentsAtlas);
@@ -169,6 +173,9 @@ public class CameraView extends LKFScreen
 		theBatcher.drawSprite(theBlue);
 		theBatcher.drawSprite(theGreen);
 		theBatcher.endBatch();
+		
+		ScreenPen.draw(theColorBatcher);
+		ScreenPen.killLine();
 		
 	}
 
