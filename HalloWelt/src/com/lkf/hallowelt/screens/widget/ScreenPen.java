@@ -1,8 +1,7 @@
 package com.lkf.hallowelt.screens.widget;
 
 import java.util.ArrayList;
-import java.util.Set;
-
+import java.util.HashSet;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -23,8 +22,8 @@ public class ScreenPen
 	private float interval = 2f;
 	
 	private static Pool<ScreenPen> PenPool;
-	private static Set<Integer> deleteIDs;
-	private static Set<Integer> IDs;
+	private static HashSet<Integer> deleteIDs = new HashSet<Integer>();
+	private static HashSet<Integer> IDs = new HashSet<Integer>();
 	private static SparseArray<ScreenPen> Pens = new SparseArray<ScreenPen>();
 	
 	static

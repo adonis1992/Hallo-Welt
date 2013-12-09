@@ -86,7 +86,7 @@ public class CameraView extends LKFScreen
 	protected void touchUpExecute(FingerHelper finger)
 	{
 		// TODO Auto-generated method stub
-		ScreenPen.endLine(finger);
+//		ScreenPen.endLine(finger);
 	}
 
 	@Override
@@ -153,7 +153,6 @@ public class CameraView extends LKFScreen
 		// TODO Auto-generated method stub
 		matrixInit();
 		theController.textureRenderInit();
-		theController.colorRenderInit();
 		
 		alphaRenderInit();
 		theBatcher.beginBatch(theComponentsAtlas);
@@ -174,8 +173,9 @@ public class CameraView extends LKFScreen
 		theBatcher.drawSprite(theGreen);
 		theBatcher.endBatch();
 		
+		theController.colorRenderInit();
 		ScreenPen.draw(theColorBatcher);
-		ScreenPen.killLine();
+//		ScreenPen.killLine();
 		
 	}
 

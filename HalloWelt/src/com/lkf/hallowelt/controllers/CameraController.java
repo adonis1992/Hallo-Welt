@@ -55,7 +55,6 @@ public class CameraController extends ModelController implements Callback
 		addBaseView();
 		
 		getSurfaceView().getHolder().setFormat(PixelFormat.TRANSPARENT);
-//		setEGLContextFactory( new ContextFactory() );
 		getSurfaceView().setZOrderOnTop(true);
 	}
 	
