@@ -235,4 +235,9 @@ public class ScreenPen
 			}	
 		}
 	}
+	
+	public void translateToDraw()
+	{
+		
+	}
 }
