@@ -138,9 +138,9 @@ public class MainMenuView extends LKFScreen
 	public void present(float deltaTime)
 	{
 		// TODO Auto-generated method stub
-		theController.textureRenderInit();
 		matrixInit();
 		
+		theController.textureRenderInit();
 		theBatcher.beginBatch(theBackgroundAtlas);
 		theBatcher.drawBackground();
 		theBatcher.endBatch();

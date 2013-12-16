@@ -16,6 +16,7 @@ public class MainMenuController extends ModelController
 	{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		addBaseView();
 	}
 
 

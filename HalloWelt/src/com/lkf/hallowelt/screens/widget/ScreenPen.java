@@ -2,7 +2,6 @@ package com.lkf.hallowelt.screens.widget;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.lkf.lib.base.Pool;
@@ -86,7 +85,6 @@ public class ScreenPen
 	}
 	
 	private ArrayList<Vector2D> thePoints;
-//	private float[] theParameters;
 	
 //	private PenState state;
 	
@@ -106,8 +104,6 @@ public class ScreenPen
 		init();
 		
 //		state = PenState.Normal;
-		
-//		theParameters = new float[7];
 	}
 	
 	private void init()
@@ -117,6 +113,7 @@ public class ScreenPen
 		second = null;
 		third = null;
 		forth = null;
+		thePoints.clear();
 	}
 	
 	private boolean addPoints(Vector2D touchPosition)
@@ -229,8 +226,6 @@ public class ScreenPen
 					{
 						onLinePoint = new Vector2D(BezierLine2D.getPointX(t), BezierLine2D.getPointY(t));
 						thePoints.add(onLinePoint);
-						Log.v("hehe", t+"");
-						Log.v("hehe", currentPoint.x + " " + currentPoint.y);
 						currentPoint = onLinePoint;
 						lineT -= interval;
 						t = (lineLength - lineT) / lineLength;

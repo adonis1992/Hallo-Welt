@@ -49,9 +49,8 @@ public class CameraController extends ModelController implements Callback
 		//Camera init
 		theCameraPreviewView = new SurfaceView(this);
 		theCameraPreviewView.getHolder().addCallback(this);;
-//		theCameraPreviewView.setAlpha(0.5f);
 		
-		addContentView(theCameraPreviewView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+//		addContentView(theCameraPreviewView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		addBaseView();
 		
 		getSurfaceView().getHolder().setFormat(PixelFormat.TRANSPARENT);

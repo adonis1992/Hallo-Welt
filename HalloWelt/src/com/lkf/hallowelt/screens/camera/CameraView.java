@@ -1,7 +1,6 @@
 package com.lkf.hallowelt.screens.camera;
 
 import java.io.IOException;
-
 import android.view.KeyEvent;
 
 import com.lkf.hallowelt.controllers.CameraController;
@@ -152,9 +151,9 @@ public class CameraView extends LKFScreen
 	{
 		// TODO Auto-generated method stub
 		matrixInit();
-		theController.textureRenderInit();
 		
 		alphaRenderInit();
+/*		theController.textureRenderInit();
 		theBatcher.beginBatch(theComponentsAtlas);
 		theBatcher.drawSprite(theBack);
 		theBatcher.drawSprite(theFilter);
@@ -171,11 +170,12 @@ public class CameraView extends LKFScreen
 		theBatcher.drawSprite(theYellow);
 		theBatcher.drawSprite(theBlue);
 		theBatcher.drawSprite(theGreen);
-		theBatcher.endBatch();
+		theBatcher.endBatch();*/
 		
 		theController.colorRenderInit();
 		ScreenPen.draw(theColorBatcher);
 //		ScreenPen.killLine();
+//		theColorBatcher.draw();
 		
 	}
 
