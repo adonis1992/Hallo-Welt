@@ -85,6 +85,7 @@ public class ScreenPen
 	}
 	
 	private ArrayList<Vector2D> thePoints;
+	private ArrayList<Vector2D> theDrawPoints;
 	
 //	private PenState state;
 	
