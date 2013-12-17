@@ -13,12 +13,12 @@ import com.lkf.lib.render.ColorBatcher;
 
 public class ScreenPen
 {	
-/*	private static enum PenState
+	private static enum PenState
 	{
-		Init, Normal, ReBuild, Dead
-	}*/
+		Init, Normal, Dead
+	}
 	
-	private float interval = 2f;
+	private float INTERVAL = 2f;
 	
 	private static Pool<ScreenPen> PenPool;
 	private static HashSet<Integer> deleteIDs = new HashSet<Integer>();
@@ -79,15 +79,16 @@ public class ScreenPen
 		{
 			for (Integer penID : IDs)
 			{
-				theColorBatcher.draw(Pens.get(penID).thePoints);
+				ScreenPen pen = Pens.get(penID);
+				theColorBatcher.draw(pen.thePoints, pen.theWidths, (pen.state == PenState.Init));
 			}
 		}
 	}
 	
 	private ArrayList<Vector2D> thePoints;
-	private ArrayList<Vector2D> theDrawPoints;
+	private ArrayList<Vector2D> theWidths;
 	
-//	private PenState state;
+	private PenState state;
 	
 	private Vector2D currentPoint;
 	private Vector2D onLinePoint;
@@ -102,9 +103,8 @@ public class ScreenPen
 	private ScreenPen()
 	{
 		thePoints = new ArrayList<Vector2D>();
+		theWidths = new ArrayList<Vector2D>();
 		init();
-		
-//		state = PenState.Normal;
 	}
 	
 	private void init()
@@ -115,6 +115,14 @@ public class ScreenPen
 		third = null;
 		forth = null;
 		thePoints.clear();
+		theWidths.clear();
+		
+		state = PenState.Init;
+	}
+	
+	public boolean getInit()
+	{
+		return (state == PenState.Init);
 	}
 	
 	private boolean addPoints(Vector2D touchPosition)
@@ -173,71 +181,78 @@ public class ScreenPen
 		return false;
 	}
 	
-	//我很没志气地放弃治疗了 T_T
-/*	private float getT(Vector2D circleCenter) 
-	{
-		theParameters[0] = (getXParameters()[0] * getXParameters()[0]) + (getYParameters()[0] * getYParameters()[0]) - 4 - (2 * getXParameters()[0] * circleCenter.x) - (2 * getYParameters()[0] * circleCenter.y) + (circleCenter.x * circleCenter.x) + (circleCenter.y *circleCenter.y);
-		theParameters[1] = (2 * getXParameters()[0] * getXParameters()[1]) + (2 * getYParameters()[0] *getYParameters()[1]) - (2 * getXParameters()[1] * circleCenter.x) - (2 * getYParameters()[1] * circleCenter.y);
-		theParameters[2] = (getXParameters()[1] * getXParameters()[1]) + (getYParameters()[1] * getYParameters()[1]) + (2 * getXParameters()[0] * getXParameters()[2]) + (2 * getYParameters()[0] * getYParameters()[2]) - (2 * getXParameters()[2] * circleCenter.x) - (2 * getYParameters()[2] * circleCenter.y);
-		theParameters[3] = (2 * getXParameters()[0] * getXParameters()[3]) + (2 * getYParameters()[0] * getYParameters()[3]) + (2 * getXParameters()[1] * getXParameters()[2]) + (2 * getYParameters()[1] * getYParameters()[2]) - (2 * getXParameters()[3] * circleCenter.x) - (2 * getYParameters()[3] * circleCenter.y);
-		theParameters[4] = (getXParameters()[2] * getXParameters()[2]) + (getYParameters()[2] * getYParameters()[2]) + (2 * getXParameters()[1] * getXParameters()[3]) + (2 * getYParameters()[1] * getYParameters()[3]);
-		theParameters[5] = (2 * getXParameters()[2] * getXParameters()[3]) + (2 * getYParameters()[2] * getYParameters()[3]);
-		theParameters[6] = (getXParameters()[3] * getXParameters()[3]) + (getYParameters()[3] * getYParameters()[3]);
-		return LKFMath.getXInSix(theParameters);
-	}*/
-	
 	public void process(Vector2D touch)
 	{
+		Vector2D formerLine;
+		
+		float lineLength;
+		
 		if (addPoints(touch))
 		{
 			if (first != null && second !=null)
 			{
 				if (third == null)
 				{
-					float lineLength = second.copy().sub(currentPoint).length();
+					lineLength = second.copy().sub(currentPoint).length();
 					lineT = lineLength;
 					
-					Vector2D cutLine = second.copy().sub(currentPoint).mul(interval / lineLength);
+					while (lineT > INTERVAL)
+					{
+						lineT -= INTERVAL;
+					}
 					
-					while (lineT > interval)
+					Vector2D cutLine = second.copy().sub(currentPoint).mul(lineLength - lineT / lineLength);
+					onLinePoint = currentPoint.copy().add(cutLine);
+					thePoints.add(onLinePoint);
+					
+					formerLine = onLinePoint.copy().sub(currentPoint);
+					theWidths.add(onLinePoint.add(formerLine.getVerticalLine(0.5f, true)));
+					theWidths.add(onLinePoint.add(formerLine.getVerticalLine(0.5f, false)));
+					
+					currentPoint = onLinePoint;
+					
+/*					Vector2D cutLine = second.copy().sub(currentPoint).mul(INTERVAL / lineLength);
+					
+					while (lineT > INTERVAL)
 					{
 						onLinePoint = currentPoint.copy().add(cutLine);
 						thePoints.add(onLinePoint);
 						currentPoint = onLinePoint;
-						lineT -= interval;
-					}
+						lineT -= INTERVAL;
+					}*/
 				}
 				else
-				{
+				{	
 					if (forth == null)
 					{
 						BezierLine2D.setBezierPoint(first, second, second, third);
+						lineLength = third.copy().sub(first).length();
 					}
 					else
 					{
 						BezierLine2D.setBezierPoint(first, second, third, forth);
+						lineLength = forth.copy().sub(first).length();
 					}
 					
-					float lineLength = third.copy().sub(second).length();
-					
-					float t = (interval - lineT) / lineLength;
+					float t = (INTERVAL - lineT) / lineLength;
+					float tLength = INTERVAL / lineLength;
 					
 					lineT = lineLength - lineT; 
-					while (lineT > interval)
+					while (lineT > INTERVAL)
 					{
 						onLinePoint = new Vector2D(BezierLine2D.getPointX(t), BezierLine2D.getPointY(t));
 						thePoints.add(onLinePoint);
+						
+						formerLine = onLinePoint.copy().sub(first);
+						theWidths.add(onLinePoint.add(formerLine.getVerticalLine(t / tLength, true)));
+						theWidths.add(onLinePoint.add(formerLine.getVerticalLine(t / tLength, false)));
+						
 						currentPoint = onLinePoint;
-						lineT -= interval;
+						lineT -= INTERVAL;
 						t = (lineLength - lineT) / lineLength;
 					}
 				}
 			}	
 		}
-	}
-	
-	public void translateToDraw()
-	{
-		
 	}
 }
