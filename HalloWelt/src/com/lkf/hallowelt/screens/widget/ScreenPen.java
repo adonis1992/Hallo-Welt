@@ -2,6 +2,8 @@ package com.lkf.hallowelt.screens.widget;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.lkf.lib.base.Pool;
@@ -80,7 +82,10 @@ public class ScreenPen
 			for (Integer penID : IDs)
 			{
 				ScreenPen pen = Pens.get(penID);
-				theColorBatcher.draw(pen.thePoints, pen.theWidths, (pen.state == PenState.Init));
+				if (pen.thePoints.size() > 1)
+				{
+					theColorBatcher.draw(pen.thePoints, pen.theWidths, (pen.state == PenState.Init));
+				}
 			}
 		}
 	}
@@ -135,7 +140,7 @@ public class ScreenPen
 		}
 		else if (second == null)
 		{
-			if (touchPosition.copy().sub(first).length() > 1f)
+			if (touchPosition.copy().sub(first).length() > INTERVAL)
 			{
 				second = new Vector2D(touchPosition);
 				return true;
@@ -147,7 +152,7 @@ public class ScreenPen
 		}
 		else if (third == null) 
 		{
-			if (touchPosition.copy().sub(second).length() > 1f)
+			if (touchPosition.copy().sub(second).length() > INTERVAL)
 			{
 				third = new Vector2D(touchPosition);
 				return true;
@@ -159,7 +164,7 @@ public class ScreenPen
 		}
 		else if (forth == null)
 		{
-			if (touchPosition.copy().sub(third).length() > 1f)
+			if (touchPosition.copy().sub(third).length() > INTERVAL)
 			{
 				forth = new Vector2D(touchPosition);
 				return true;
@@ -169,7 +174,7 @@ public class ScreenPen
 				return false;
 			}
 		}
-		else if (touchPosition.copy().sub(forth).length() > 1f)
+		else if (touchPosition.copy().sub(forth).length() > INTERVAL)
 		{
 			first.set(second);
 			second.set(third);
@@ -203,6 +208,7 @@ public class ScreenPen
 					
 					Vector2D cutLine = second.copy().sub(currentPoint).mul(lineLength - lineT / lineLength);
 					onLinePoint = currentPoint.copy().add(cutLine);
+					thePoints.add(currentPoint);
 					thePoints.add(onLinePoint);
 					
 					formerLine = onLinePoint.copy().sub(currentPoint);
@@ -210,28 +216,42 @@ public class ScreenPen
 					theWidths.add(onLinePoint.add(formerLine.getVerticalLine(0.5f, false)));
 					
 					currentPoint = onLinePoint;
-					
-/*					Vector2D cutLine = second.copy().sub(currentPoint).mul(INTERVAL / lineLength);
-					
-					while (lineT > INTERVAL)
-					{
-						onLinePoint = currentPoint.copy().add(cutLine);
-						thePoints.add(onLinePoint);
-						currentPoint = onLinePoint;
-						lineT -= INTERVAL;
-					}*/
 				}
 				else
-				{	
-					if (forth == null)
+				{
+					if (forth != null)
+					{
+						BezierLine2D.setBezierPoint(first, second, third, forth);
+						lineLength = third.copy().sub(second).length();
+						
+						float t = (INTERVAL - lineT) / lineLength;
+						float tLength = INTERVAL / lineLength;
+						
+						lineT = lineLength + lineT - INTERVAL; 
+						while (lineT > INTERVAL)
+						{
+							onLinePoint = new Vector2D(BezierLine2D.getPointX(t), BezierLine2D.getPointY(t));
+							thePoints.add(onLinePoint);
+							
+							formerLine = onLinePoint.copy().sub(currentPoint);
+							theWidths.add(onLinePoint.add(formerLine.getVerticalLine(t / tLength, true)));
+							theWidths.add(onLinePoint.add(formerLine.getVerticalLine(t / tLength, false)));
+							
+							currentPoint = onLinePoint;
+							lineT -= INTERVAL;
+							t = (lineLength - lineT) / lineLength;
+						}
+					}
+												
+/*					if (forth == null)
 					{
 						BezierLine2D.setBezierPoint(first, second, second, third);
-						lineLength = third.copy().sub(first).length();
+						lineLength = third.copy().sub(currentPoint).length();
 					}
 					else
 					{
 						BezierLine2D.setBezierPoint(first, second, third, forth);
-						lineLength = forth.copy().sub(first).length();
+						lineLength = forth.copy().sub(currentPoint).length();
 					}
 					
 					float t = (INTERVAL - lineT) / lineLength;
@@ -250,7 +270,7 @@ public class ScreenPen
 						currentPoint = onLinePoint;
 						lineT -= INTERVAL;
 						t = (lineLength - lineT) / lineLength;
-					}
+					}*/
 				}
 			}	
 		}

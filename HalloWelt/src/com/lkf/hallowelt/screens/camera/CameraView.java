@@ -85,7 +85,7 @@ public class CameraView extends LKFScreen
 	protected void touchUpExecute(FingerHelper finger)
 	{
 		// TODO Auto-generated method stub
-//		ScreenPen.endLine(finger);
+		ScreenPen.endLine(finger);
 	}
 
 	@Override
