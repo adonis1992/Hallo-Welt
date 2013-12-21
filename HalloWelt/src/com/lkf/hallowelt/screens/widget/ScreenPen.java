@@ -20,7 +20,7 @@ public class ScreenPen
 		Init, Normal, Dead
 	}
 	
-	private float INTERVAL = 2f;
+	private float INTERVAL = 10f;
 	
 	private static Pool<ScreenPen> PenPool;
 	private static HashSet<Integer> deleteIDs = new HashSet<Integer>();
@@ -84,7 +84,7 @@ public class ScreenPen
 				ScreenPen pen = Pens.get(penID);
 				if (pen.thePoints.size() > 1)
 				{
-					theColorBatcher.draw(pen.thePoints, pen.theWidths, (pen.state == PenState.Init));
+					theColorBatcher.draw(pen.thePoints, pen.theWidths, false);
 				}
 			}
 		}
@@ -208,8 +208,8 @@ public class ScreenPen
 					
 					Vector2D cutLine = second.copy().sub(currentPoint).mul(lineLength - lineT / lineLength);
 					onLinePoint = currentPoint.copy().add(cutLine);
-					thePoints.add(currentPoint);
-					thePoints.add(onLinePoint);
+					thePoints.add(currentPoint.copy());
+					thePoints.add(onLinePoint.copy());
 					
 					formerLine = onLinePoint.copy().sub(currentPoint);
 					theWidths.add(onLinePoint.add(formerLine.getVerticalLine(0.5f, true)));
@@ -231,7 +231,7 @@ public class ScreenPen
 						while (lineT > INTERVAL)
 						{
 							onLinePoint = new Vector2D(BezierLine2D.getPointX(t), BezierLine2D.getPointY(t));
-							thePoints.add(onLinePoint);
+							thePoints.add(onLinePoint.copy());
 							
 							formerLine = onLinePoint.copy().sub(currentPoint);
 							theWidths.add(onLinePoint.add(formerLine.getVerticalLine(t / tLength, true)));
@@ -242,35 +242,6 @@ public class ScreenPen
 							t = (lineLength - lineT) / lineLength;
 						}
 					}
-												
-/*					if (forth == null)
-					{
-						BezierLine2D.setBezierPoint(first, second, second, third);
-						lineLength = third.copy().sub(currentPoint).length();
-					}
-					else
-					{
-						BezierLine2D.setBezierPoint(first, second, third, forth);
-						lineLength = forth.copy().sub(currentPoint).length();
-					}
-					
-					float t = (INTERVAL - lineT) / lineLength;
-					float tLength = INTERVAL / lineLength;
-					
-					lineT = lineLength - lineT; 
-					while (lineT > INTERVAL)
-					{
-						onLinePoint = new Vector2D(BezierLine2D.getPointX(t), BezierLine2D.getPointY(t));
-						thePoints.add(onLinePoint);
-						
-						formerLine = onLinePoint.copy().sub(first);
-						theWidths.add(onLinePoint.add(formerLine.getVerticalLine(t / tLength, true)));
-						theWidths.add(onLinePoint.add(formerLine.getVerticalLine(t / tLength, false)));
-						
-						currentPoint = onLinePoint;
-						lineT -= INTERVAL;
-						t = (lineLength - lineT) / lineLength;
-					}*/
 				}
 			}	
 		}
