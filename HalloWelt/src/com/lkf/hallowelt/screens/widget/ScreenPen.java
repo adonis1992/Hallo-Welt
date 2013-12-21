@@ -20,7 +20,7 @@ public class ScreenPen
 		Init, Normal, Dead
 	}
 	
-	private float INTERVAL = 10f;
+	private float INTERVAL = 4f;
 	
 	private static Pool<ScreenPen> PenPool;
 	private static HashSet<Integer> deleteIDs = new HashSet<Integer>();
@@ -90,8 +90,10 @@ public class ScreenPen
 		}
 	}
 	
-	private ArrayList<Vector2D> thePoints;
+	private ArrayList<Vector2D> theGetPoints;
+	private ArrayList<Vector2D> theDrawPoints;
 	private ArrayList<Vector2D> theWidths;
+	private ArrayList<Vector2D> theTempPoints;
 	
 	private PenState state;
 	
@@ -100,26 +102,33 @@ public class ScreenPen
 	
 	private float lineT;
 	
-	private Vector2D first;
-	private Vector2D second;
-	private Vector2D third;
-	private Vector2D forth;
+//	private Vector2D first;
+//	private Vector2D second;
+//	private Vector2D third;
+//	private Vector2D forth;
 	
 	private ScreenPen()
 	{
-		thePoints = new ArrayList<Vector2D>();
+		theGetPoints = new ArrayList<Vector2D>();
+		theDrawPoints = new ArrayList<Vector2D>();
 		theWidths = new ArrayList<Vector2D>();
+		theTempPoints = new ArrayList<Vector2D>();
+		
+		currentPoint = new Vector2D();
 		init();
 	}
 	
 	private void init()
 	{
-		lineT = 2;
-		first = null;
-		second = null;
-		third = null;
-		forth = null;
-		thePoints.clear();
+		lineT = -1;
+//		first = null;
+//		second = null;
+//		third = null;
+//		forth = null;
+		currentPoint = null;
+		
+		theGetPoints.clear();
+		theDrawPoints.clear();
 		theWidths.clear();
 		
 		state = PenState.Init;
@@ -130,7 +139,119 @@ public class ScreenPen
 		return (state == PenState.Init);
 	}
 	
-	private boolean addPoints(Vector2D touchPosition)
+	public void addPointFromTouch(Vector2D touchPosition)
+	{
+		if (currentPoint != null || touchPosition.copy().sub(currentPoint).length() > 2 * INTERVAL)
+		{
+			currentPoint.set(touchPosition);
+			theGetPoints.add(new Vector2D(touchPosition));
+		}
+	}
+	
+	public void prepareForDraw()
+	{	
+		int pointsNumber = theGetPoints.size();
+		int ProcessedPointNumber = 0;
+		
+		if (pointsNumber > 4) 
+		{	
+			Vector2D formerLine;//Lines!!!!
+			Vector2D onLinePoint = new Vector2D();
+			
+			float tLength;
+			
+			for (; pointsNumber - ProcessedPointNumber > 4; ProcessedPointNumber += 4)
+			{
+				BezierLine2D.setBezierPoint(theGetPoints.get(ProcessedPointNumber), theGetPoints.get(ProcessedPointNumber + 1),
+						theGetPoints.get(ProcessedPointNumber + 2), theGetPoints.get(ProcessedPointNumber + 3));
+				
+				tLength = INTERVAL / BezierLine2D.getLineLength();
+				if (lineT == -1)
+				{
+					lineT = tLength;
+					currentPoint.set(theGetPoints.get(0));
+					onLinePoint.set(currentPoint);
+					theDrawPoints.add(currentPoint.copy());
+				}
+				while (lineT < 1- tLength)
+				{
+					onLinePoint.set(BezierLine2D.getPoint(lineT));
+					theDrawPoints.add(onLinePoint.copy());
+					formerLine = onLinePoint.copy().sub(currentPoint);
+					theWidths.add(onLinePoint.add(formerLine.getVerticalLine(lineT * 0.5f / tLength, true)));
+					theWidths.add(onLinePoint.add(formerLine.getVerticalLine(lineT * 0.5f / tLength, false)));
+					currentPoint.set(onLinePoint);
+					lineT += tLength;
+				}
+			}
+		}
+		else if (pointsNumber > 0)
+		{
+			while (ProcessedPointNumber < pointsNumber)
+			{
+				theTempPoints.add(theGetPoints.get(ProcessedPointNumber));
+				ProcessedPointNumber++;
+			}
+			theGetPoints.clear();
+			theGetPoints.addAll(theTempPoints);
+		}
+	}
+	
+	private void PrepareForEnd()
+	{
+		Vector2D formerLine;//Lines!!!!
+		
+		Vector2D lastPoint;//Points!!!!
+		Vector2D onLinePoint;
+		
+		int pointsNumber = theGetPoints.size();
+		
+		switch (pointsNumber)
+		{
+		case 1:
+			
+			break;
+
+		default:
+			break;
+		}
+		
+		if (pointsNumber < 3 && pointsNumber > 0)
+		{
+			theDrawPoints.add(theGetPoints.get(0).copy());
+			if (pointsNumber == 2)
+			{
+				theDrawPoints.add(theGetPoints.get(1).copy());
+				lastPoint = new Vector2D(theGetPoints.get(1));
+				formerLine = theGetPoints.get(0).copy().sub(lastPoint);
+				theWidths.add(lastPoint.add(formerLine.getVerticalLine(0.5f, true)));
+				theWidths.add(lastPoint.add(formerLine.getVerticalLine(0.5f, false)));
+			}
+		}
+		else if (pointsNumber == 3)
+		{
+			lastPoint = new Vector2D(theGetPoints.get(0));
+			onLinePoint = new Vector2D(lastPoint);
+			theDrawPoints.add(lastPoint.copy());
+			BezierLine2D.setBezierPoint(theGetPoints.get(0), theGetPoints.get(1), theGetPoints.get(2));
+			
+			float t = INTERVAL / BezierLine2D.getLineLength();
+			float tLength = t;
+			
+			while (t < 1 - tLength)
+			{
+				onLinePoint.set(BezierLine2D.getPoint(t));
+				theDrawPoints.add(onLinePoint.copy());
+				formerLine = onLinePoint.copy().sub(lastPoint);
+				theWidths.add(onLinePoint.add(formerLine.getVerticalLine(t * 0.5f / tLength, true)));
+				theWidths.add(onLinePoint.add(formerLine.getVerticalLine(t * 0.5f / tLength, false)));
+				lastPoint.set(onLinePoint);
+				t += tLength;
+			}
+		}
+	}
+	
+/*	private boolean addPoints(Vector2D touchPosition)
 	{
 		if (first == null)
 		{
@@ -245,5 +366,5 @@ public class ScreenPen
 				}
 			}	
 		}
-	}
+	}*/
 }
