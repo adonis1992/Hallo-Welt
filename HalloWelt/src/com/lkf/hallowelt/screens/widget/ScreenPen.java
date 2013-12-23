@@ -20,7 +20,7 @@ public class ScreenPen
 		Init, Normal, Dead
 	}
 	
-	private float INTERVAL = 4f;
+	private static float INTERVAL = 4f;
 	
 	private static Pool<ScreenPen> PenPool;
 	private static HashSet<Integer> deleteIDs = new HashSet<Integer>();
@@ -46,22 +46,22 @@ public class ScreenPen
 	{
 		IDs.add(finger.getID());
 		Pens.put(finger.getID(), PenPool.newObject());
-		Pens.get(finger.getID()).process(finger.getPosition());
+		Pens.get(finger.getID()).addPointFromTouch(finger.getPosition());
 	}
 	
 	public static void move(FingerHelper finger)
 	{
-		Pens.get(finger.getID()).process(finger.getPosition());
+		Pens.get(finger.getID()).addPointFromTouch(finger.getPosition());
 	}
 	
 	public static void endLine(FingerHelper finger)
 	{
-		Pens.get(finger.getID()).process(finger.getPosition());
-//		Pens.get(finger.getID()).state = PenState.Dead;
+		Pens.get(finger.getID()).addPointFromTouch(finger.getPosition());
+		Pens.get(finger.getID()).state = PenState.Dead;
 		deleteIDs.add(finger.getID());
 	}
 	
-	public static void killLine()
+/*	public static void killLine()
 	{
 		if (deleteIDs.size() > 0)
 		{
@@ -73,7 +73,7 @@ public class ScreenPen
 				IDs.remove(penID);
 			}
 		}
-	}
+	}*/
 	
 	public static void draw(ColorBatcher theColorBatcher)
 	{
@@ -82,10 +82,12 @@ public class ScreenPen
 			for (Integer penID : IDs)
 			{
 				ScreenPen pen = Pens.get(penID);
-				if (pen.thePoints.size() > 1)
+				pen.prepareForDraw();
+				if (pen.state == PenState.Dead)
 				{
-					theColorBatcher.draw(pen.thePoints, pen.theWidths, false);
+					pen.PrepareForEnd();
 				}
+				theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, false);
 			}
 		}
 	}
@@ -94,17 +96,10 @@ public class ScreenPen
 	private ArrayList<Vector2D> theDrawPoints;
 	private ArrayList<Vector2D> theWidths;
 	private ArrayList<Vector2D> theTempPoints;
-	
-	private PenState state;
-	
 	private Vector2D currentPoint;
 	
 	private float lineT;
-	
-//	private Vector2D first;
-//	private Vector2D second;
-//	private Vector2D third;
-//	private Vector2D forth;
+	private PenState state;
 	
 	private ScreenPen()
 	{
@@ -114,19 +109,12 @@ public class ScreenPen
 		theTempPoints = new ArrayList<Vector2D>();
 		
 		currentPoint = new Vector2D();
+		lineT = -1;
 		init();
 	}
 	
 	private void init()
-	{
-		lineT = -1;
-//		first = null;
-//		second = null;
-//		third = null;
-//		forth = null;
-		currentPoint = null;
-		
-		theGetPoints.clear();
+	{		
 		theDrawPoints.clear();
 		theWidths.clear();
 		
@@ -140,18 +128,23 @@ public class ScreenPen
 	
 	public void addPointFromTouch(Vector2D touchPosition)
 	{
-		if (currentPoint != null || touchPosition.copy().sub(currentPoint).length() > 2 * INTERVAL)
+		if (state == PenState.Init)
 		{
-			currentPoint.set(touchPosition);
-			theGetPoints.add(new Vector2D(touchPosition));
+			theGetPoints.add(touchPosition.copy());
+			state = PenState.Normal;
+		}
+		else if	(touchPosition.copy().sub(currentPoint).length() > 2 * INTERVAL)
+		{
+			theGetPoints.add(touchPosition.copy());
 		}
 	}
 	
-	public void prepareForDraw()
+	private void prepareForDraw()
 	{	
 		int pointsNumber = theGetPoints.size();
 		int ProcessedPointNumber = 0;
 		
+		Log.v("hehe process point", "" + pointsNumber);
 		if (pointsNumber > 4) 
 		{	
 			Vector2D formerLine;//Lines!!!!
@@ -171,17 +164,23 @@ public class ScreenPen
 					currentPoint.set(theGetPoints.get(0));
 					onLinePoint.set(currentPoint);
 					theDrawPoints.add(currentPoint.copy());
+					Log.v("hehe process init", theDrawPoints.size() + "");
+					Log.v("hehe process init", lineT + "");
 				}
 				while (lineT < 1)
 				{
 					onLinePoint.set(BezierLine2D.getPoint(lineT));
 					theDrawPoints.add(onLinePoint.copy());
+					Log.v("hehe process next", theDrawPoints.size() + "");
 					formerLine = onLinePoint.copy().sub(currentPoint);
 					theWidths.add(onLinePoint.add(formerLine.getVerticalLine(lineT * 0.5f / tLength, true)));
 					theWidths.add(onLinePoint.add(formerLine.getVerticalLine(lineT * 0.5f / tLength, false)));
 					currentPoint.set(onLinePoint);
 					lineT += tLength;
+					Log.v("hehe process while", lineT + "");
 				}
+				Log.v("hehe process for", lineT + "");
+				lineT -= 1;
 			}
 			while (ProcessedPointNumber < pointsNumber)
 			{
@@ -325,166 +324,7 @@ public class ScreenPen
 				theDrawPoints.add(point4.copy());
 			}
 		}
-		
-/*		switch (pointsNumber)
-		{
-		case 1:
-			
-			break;
-
-		default:
-			break;
-		}
-		
-		if (pointsNumber < 3 && pointsNumber > 0)
-		{
-			theDrawPoints.add(theGetPoints.get(0).copy());
-			if (pointsNumber == 2)
-			{
-				theDrawPoints.add(theGetPoints.get(1).copy());
-				lastPoint = new Vector2D(theGetPoints.get(1));
-				formerLine = theGetPoints.get(0).copy().sub(lastPoint);
-				theWidths.add(lastPoint.add(formerLine.getVerticalLine(0.5f, true)));
-				theWidths.add(lastPoint.add(formerLine.getVerticalLine(0.5f, false)));
-			}
-		}
-		else if (pointsNumber == 3)
-		{
-			lastPoint = new Vector2D(theGetPoints.get(0));
-			onLinePoint = new Vector2D(lastPoint);
-			theDrawPoints.add(lastPoint.copy());
-			BezierLine2D.setBezierPoint(theGetPoints.get(0), theGetPoints.get(1), theGetPoints.get(2));
-			
-			float t = INTERVAL / BezierLine2D.getLineLength();
-			float tLength = t;
-			
-			while (t < 1 - tLength)
-			{
-				onLinePoint.set(BezierLine2D.getPoint(t));
-				theDrawPoints.add(onLinePoint.copy());
-				formerLine = onLinePoint.copy().sub(lastPoint);
-				theWidths.add(onLinePoint.add(formerLine.getVerticalLine(t * 0.5f / tLength, true)));
-				theWidths.add(onLinePoint.add(formerLine.getVerticalLine(t * 0.5f / tLength, false)));
-				lastPoint.set(onLinePoint);
-				t += tLength;
-			}
-		}
-	}
-	
-	private boolean addPoints(Vector2D touchPosition)
-	{
-		if (first == null)
-		{
-			first = new Vector2D(touchPosition);
-			currentPoint = first;
-			return true;
-		}
-		else if (second == null)
-		{
-			if (touchPosition.copy().sub(first).length() > INTERVAL)
-			{
-				second = new Vector2D(touchPosition);
-				return true;
-			}
-			else 
-			{
-				return false;
-			}
-		}
-		else if (third == null) 
-		{
-			if (touchPosition.copy().sub(second).length() > INTERVAL)
-			{
-				third = new Vector2D(touchPosition);
-				return true;
-			}
-			else 
-			{
-				return false;
-			}
-		}
-		else if (forth == null)
-		{
-			if (touchPosition.copy().sub(third).length() > INTERVAL)
-			{
-				forth = new Vector2D(touchPosition);
-				return true;
-			}
-			else 
-			{
-				return false;
-			}
-		}
-		else if (touchPosition.copy().sub(forth).length() > INTERVAL)
-		{
-			first.set(second);
-			second.set(third);
-			third.set(forth);
-			forth.set(touchPosition);
-			return true;
-		}
-		
-		return false;
-	}
-	
-	public void process(Vector2D touch)
-	{
-		Vector2D formerLine;
-		
-		float lineLength;
-		
-		if (addPoints(touch))
-		{
-			if (first != null && second !=null)
-			{
-				if (third == null)
-				{
-					lineLength = second.copy().sub(currentPoint).length();
-					lineT = lineLength;
-					
-					while (lineT > INTERVAL)
-					{
-						lineT -= INTERVAL;
-					}
-					
-					Vector2D cutLine = second.copy().sub(currentPoint).mul(lineLength - lineT / lineLength);
-					onLinePoint = currentPoint.copy().add(cutLine);
-					thePoints.add(currentPoint.copy());
-					thePoints.add(onLinePoint.copy());
-					
-					formerLine = onLinePoint.copy().sub(currentPoint);
-					theWidths.add(onLinePoint.add(formerLine.getVerticalLine(0.5f, true)));
-					theWidths.add(onLinePoint.add(formerLine.getVerticalLine(0.5f, false)));
-					
-					currentPoint = onLinePoint;
-				}
-				else
-				{
-					if (forth != null)
-					{
-						BezierLine2D.setBezierPoint(first, second, third, forth);
-						lineLength = third.copy().sub(second).length();
-						
-						float t = (INTERVAL - lineT) / lineLength;
-						float tLength = INTERVAL / lineLength;
-						
-						lineT = lineLength + lineT - INTERVAL; 
-						while (lineT > INTERVAL)
-						{
-							onLinePoint = new Vector2D(BezierLine2D.getPointX(t), BezierLine2D.getPointY(t));
-							thePoints.add(onLinePoint.copy());
-							
-							formerLine = onLinePoint.copy().sub(currentPoint);
-							theWidths.add(onLinePoint.add(formerLine.getVerticalLine(t / tLength, true)));
-							theWidths.add(onLinePoint.add(formerLine.getVerticalLine(t / tLength, false)));
-							
-							currentPoint = onLinePoint;
-							lineT -= INTERVAL;
-							t = (lineLength - lineT) / lineLength;
-						}
-					}
-				}
-			}	
-		}*/
+		theGetPoints.clear();
+		lineT = -1;
 	}
 }
