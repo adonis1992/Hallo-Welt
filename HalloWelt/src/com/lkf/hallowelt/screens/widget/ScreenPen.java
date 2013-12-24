@@ -93,11 +93,11 @@ public class ScreenPen
 				{
 					pen.prepareForDraw();
 					pen.PrepareForEnd();
-					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true);
+					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true, true);
 				}
 				else if (pen.prepareForDraw())
 				{
-					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true);
+					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true, false);
 				}
 			}
 		}
@@ -106,7 +106,6 @@ public class ScreenPen
 	private ArrayList<Vector2D> theGetPoints;
 	private ArrayList<Vector2D> theDrawPoints;
 	private ArrayList<Vector2D> theWidths;
-//	private ArrayList<Vector2D> theTempPoints;
 	private Vector2D currentPoint;
 	
 	private float lineT;
@@ -117,7 +116,6 @@ public class ScreenPen
 		theGetPoints = new ArrayList<Vector2D>();
 		theDrawPoints = new ArrayList<Vector2D>();
 		theWidths = new ArrayList<Vector2D>();
-//		theTempPoints = new ArrayList<Vector2D>();
 		
 		currentPoint = new Vector2D();
 		lineT = -1;
@@ -259,41 +257,6 @@ public class ScreenPen
 				}
 				break;
 			}
-/*			case 4: 
-			{
-				Vector2D point1 = theGetPoints.get(0).copy();
-				Vector2D point2 = theGetPoints.get(1).copy();
-				Vector2D point3 = theGetPoints.get(2).copy();
-				Vector2D point4 = theGetPoints.get(3).copy();
-				Vector2D onLinePoint = new Vector2D();
-				currentPoint.set(point1);
-				BezierLine2D.setBezierPoint(point1, point2, point3, point4);
-				
-				theDrawPoints.add(point1.copy());
-				
-				float tLength = INTERVAL / BezierLine2D.getLineLength();
-				lineT = tLength;
-				
-				while (lineT < 1)
-				{
-					onLinePoint.set(BezierLine2D.getPoint(lineT));
-					theDrawPoints.add(onLinePoint.copy());
-					formerLine = onLinePoint.copy().sub(currentPoint);
-					theWidths.add(onLinePoint.add(formerLine.getVerticalLine(lineT * 0.5f / tLength, true)));
-					theWidths.add(onLinePoint.add(formerLine.getVerticalLine(lineT * 0.5f / tLength, false)));
-					currentPoint.set(onLinePoint);
-					lineT += tLength;
-				}
-				if (!currentPoint.equals(point4))
-				{
-					theDrawPoints.add(point4.copy());
-				}
-				break;
-			}
-			default:
-			{
-				break;//This will never be get in.
-			}*/
 			}
 		}
 		else 
@@ -346,33 +309,6 @@ public class ScreenPen
 				break;
 			}
 			}
-/*			Vector2D point1 = theGetPoints.get(0).copy();
-			Vector2D point2 = theGetPoints.get(1).copy();
-			Vector2D point3 = theGetPoints.get(2).copy();
-			Vector2D point4 = theGetPoints.get(3).copy();
-			Vector2D onLinePoint = new Vector2D();
-			currentPoint.set(point1);
-			BezierLine2D.setBezierPoint(point1, point2, point3, point4);
-			
-			theDrawPoints.add(point1.copy());
-			
-			float tLength = INTERVAL / BezierLine2D.getLineLength();
-			lineT += tLength;
-			
-			while (lineT < 1)
-			{
-				onLinePoint.set(BezierLine2D.getPoint(lineT));
-				theDrawPoints.add(onLinePoint.copy());
-				formerLine = onLinePoint.copy().sub(currentPoint);
-				theWidths.add(onLinePoint.add(formerLine.getVerticalLine(lineT * 0.5f / tLength, true)));
-				theWidths.add(onLinePoint.add(formerLine.getVerticalLine(lineT * 0.5f / tLength, false)));
-				currentPoint.set(onLinePoint);
-				lineT += tLength;
-			}
-			if (!currentPoint.equals(point4))
-			{
-				theDrawPoints.add(point4.copy());
-			}*/
 		}
 		theGetPoints.clear();
 		lineT = -1;
