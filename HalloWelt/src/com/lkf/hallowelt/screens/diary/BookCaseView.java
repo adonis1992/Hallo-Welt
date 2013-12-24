@@ -65,6 +65,12 @@ public class BookCaseView extends LKFScreen
 	}
 
 	@Override
+	protected void laterCommunicateExecure()
+	{
+		
+	}
+	
+	@Override
 	protected void textureLoad()
 	{
 		// TODO Auto-generated method stub

@@ -17,7 +17,7 @@ public class ScreenPen
 {	
 	private static enum PenState
 	{
-		Init, Normal, Dead
+		Init, Normal, Dead, Finish
 	}
 	
 	private static float INTERVAL = 4f;
@@ -89,15 +89,51 @@ public class ScreenPen
 			for (Integer penID : IDs)
 			{
 				ScreenPen pen = Pens.get(penID);
-				if (pen.state == PenState.Dead)
+				if (pen.drawFlag)
+				{
+					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true);
+				}	
+			}
+		}
+/*		if (IDs.size() > 0)
+		{
+			for (Integer penID : IDs)
+			{
+				ScreenPen pen = Pens.get(penID);
+				if (pen.state == PenState.Finish)
+				{
+					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true);
+				}
+				else if (pen.state == PenState.Dead)
 				{
 					pen.prepareForDraw();
 					pen.PrepareForEnd();
-					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true, true);
+					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true);//here
+					pen.state = PenState.Finish;
 				}
 				else if (pen.prepareForDraw())
 				{
-					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true, false);
+					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true);
+				}
+			}
+		}*/
+	}
+	
+	public static void drawProcess()
+	{
+		if (IDs.size() > 0)
+		{
+			for (Integer penID : IDs)
+			{
+				ScreenPen pen = Pens.get(penID);
+				if (pen.state != PenState.Finish)
+				{
+					pen.prepareForDraw();
+					if (pen.state == PenState.Dead)
+					{
+						pen.PrepareForEnd();
+						pen.state = PenState.Finish;
+					}
 				}
 			}
 		}
@@ -110,6 +146,7 @@ public class ScreenPen
 	
 	private float lineT;
 	private PenState state;
+	private boolean drawFlag;
 	
 	private ScreenPen()
 	{
@@ -128,6 +165,7 @@ public class ScreenPen
 		theWidths.clear();
 		
 		state = PenState.Init;
+		drawFlag = false;
 	}
 	
 	public boolean getInit()
@@ -149,7 +187,7 @@ public class ScreenPen
 		}
 	}
 	
-	private boolean prepareForDraw()
+	private void prepareForDraw()
 	{	
 		if (theGetPoints.size() > 3)
 		{
@@ -188,9 +226,9 @@ public class ScreenPen
 				theGetPoints.remove(0);
 			}
 			
-			return true;
+			drawFlag = true;
 		}
-		return false;
+		drawFlag = false;
 	}
 	
 	private void PrepareForEnd()

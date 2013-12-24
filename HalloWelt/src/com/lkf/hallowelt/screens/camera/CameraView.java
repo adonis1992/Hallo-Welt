@@ -108,6 +108,12 @@ public class CameraView extends LKFScreen
 	}
 	
 	@Override
+	protected void laterCommunicateExecure()
+	{
+		ScreenPen.drawProcess();
+	}
+	
+	@Override
 	protected void textureLoad()
 	{
 		// TODO Auto-generated method stub
