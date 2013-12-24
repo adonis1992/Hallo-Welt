@@ -91,6 +91,7 @@ public class ScreenPen
 				ScreenPen pen = Pens.get(penID);
 				if (pen.drawFlag)
 				{
+					Log.v("hehe", "fuck");
 					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true);
 				}	
 			}
@@ -228,7 +229,6 @@ public class ScreenPen
 			
 			drawFlag = true;
 		}
-		drawFlag = false;
 	}
 	
 	private void PrepareForEnd()
