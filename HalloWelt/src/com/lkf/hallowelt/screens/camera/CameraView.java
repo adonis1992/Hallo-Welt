@@ -153,7 +153,7 @@ public class CameraView extends LKFScreen
 		matrixInit();
 		
 		alphaRenderInit();
-/*		theController.textureRenderInit();
+		theController.textureRenderInit();
 		theBatcher.beginBatch(theComponentsAtlas);
 		theBatcher.drawSprite(theBack);
 		theBatcher.drawSprite(theFilter);
@@ -170,12 +170,11 @@ public class CameraView extends LKFScreen
 		theBatcher.drawSprite(theYellow);
 		theBatcher.drawSprite(theBlue);
 		theBatcher.drawSprite(theGreen);
-		theBatcher.endBatch();*/
+		theBatcher.endBatch();
 		
 		theController.colorRenderInit();
 		ScreenPen.draw(theColorBatcher);
 //		ScreenPen.killLine();
-//		theColorBatcher.draw();
 		
 	}
 
