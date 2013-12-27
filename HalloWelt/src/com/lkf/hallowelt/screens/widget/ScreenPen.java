@@ -3,7 +3,6 @@ package com.lkf.hallowelt.screens.widget;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.lkf.lib.base.Pool;
@@ -22,8 +21,10 @@ public class ScreenPen
 	
 	private static float INTERVAL = 4f;
 	
+	private static boolean recordFlag;
+	
 	private static Pool<ScreenPen> PenPool;
-	private static HashSet<Integer> deleteIDs = new HashSet<Integer>();
+//	private static HashSet<Integer> deleteIDs = new HashSet<Integer>();
 	private static HashSet<Integer> IDs = new HashSet<Integer>();
 	private static SparseArray<ScreenPen> Pens = new SparseArray<ScreenPen>();
 	
@@ -40,19 +41,21 @@ public class ScreenPen
 		};
 		
 		PenPool = new Pool<ScreenPen>(factory, 20);
+		recordFlag = false;
 	}
 	
 	public static void initLine(FingerHelper finger)
 	{
 		IDs.add(finger.getID());
-		if (Pens.get(finger.getID()) == null)
+		Pens.put(finger.getID(), PenPool.newObject());
+/*		if (Pens.get(finger.getID()) == null)
 		{
 			Pens.put(finger.getID(), PenPool.newObject());
 		}
 		else 
 		{
 			Pens.get(finger.getID()).init();
-		}
+		}*/
 		Pens.get(finger.getID()).addPointFromTouch(finger.getPosition());
 	}
 	
@@ -65,79 +68,63 @@ public class ScreenPen
 	{
 		Pens.get(finger.getID()).addPointFromTouch(finger.getPosition());
 		Pens.get(finger.getID()).state = PenState.Dead;
-		deleteIDs.add(finger.getID());
+		recordFlag = true;
 	}
 	
-/*	public static void killLine()
+	public static boolean needDraw()
 	{
-		if (deleteIDs.size() > 0)
-		{
-			for (Integer penID : deleteIDs)
-			{
-				Pens.get(penID).init();
-				PenPool.free(Pens.get(penID));
-				Pens.remove(penID);
-				IDs.remove(penID);
-			}
-		}
-	}*/
+		return (IDs.size() > 0);
+	}
+	
+	public static boolean needRecord()
+	{
+		return recordFlag;
+	}
 	
 	public static void draw(ColorBatcher theColorBatcher)
 	{
-		if (IDs.size() > 0)
+		for (Integer penID : IDs)
 		{
-			for (Integer penID : IDs)
+			ScreenPen pen = Pens.get(penID);
+			if (pen.drawFlag)
 			{
-				ScreenPen pen = Pens.get(penID);
-				if (pen.drawFlag)
-				{
-					Log.v("hehe", "fuck");
-					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true);
-				}	
-			}
+				theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true);
+			}	
 		}
-/*		if (IDs.size() > 0)
-		{
-			for (Integer penID : IDs)
-			{
-				ScreenPen pen = Pens.get(penID);
-				if (pen.state == PenState.Finish)
-				{
-					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true);
-				}
-				else if (pen.state == PenState.Dead)
-				{
-					pen.prepareForDraw();
-					pen.PrepareForEnd();
-					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true);//here
-					pen.state = PenState.Finish;
-				}
-				else if (pen.prepareForDraw())
-				{
-					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true);
-				}
-			}
-		}*/
 	}
 	
 	public static void drawProcess()
 	{
-		if (IDs.size() > 0)
+		for (Integer penID : IDs)
 		{
-			for (Integer penID : IDs)
+			ScreenPen pen = Pens.get(penID);
+			if (pen.state != PenState.Finish)
 			{
-				ScreenPen pen = Pens.get(penID);
-				if (pen.state != PenState.Finish)
+				pen.prepareForDraw();
+				if (pen.state == PenState.Dead)
 				{
-					pen.prepareForDraw();
-					if (pen.state == PenState.Dead)
-					{
-						pen.PrepareForEnd();
-						pen.state = PenState.Finish;
-					}
+					pen.PrepareForEnd();
+					pen.state = PenState.Finish;
 				}
 			}
 		}
+	}
+	
+	public static void saveProcess()
+	{
+		for (Integer penID : IDs)
+		{
+			ScreenPen pen = Pens.get(penID);
+			pen.pointsClear();
+			if (pen.state == PenState.Finish)
+			{
+				pen.state = PenState.Init;
+				PenPool.free(pen);
+				Pens.remove(penID);
+				IDs.remove(penID);
+			}
+		}
+		recordFlag = false;
 	}
 	
 	private ArrayList<Vector2D> theGetPoints;
@@ -157,15 +144,15 @@ public class ScreenPen
 		
 		currentPoint = new Vector2D();
 		lineT = -1;
-		init();
+		drawFlag = false;
+		state = PenState.Init;
 	}
 	
-	private void init()
-	{		
+	private void pointsClear()
+	{
 		theDrawPoints.clear();
 		theWidths.clear();
 		
-		state = PenState.Init;
 		drawFlag = false;
 	}
 	

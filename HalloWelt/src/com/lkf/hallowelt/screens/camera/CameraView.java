@@ -3,13 +3,10 @@ package com.lkf.hallowelt.screens.camera;
 import static android.opengl.GLES20.GL_RGBA;
 import static android.opengl.GLES20.GL_UNSIGNED_BYTE;
 import static android.opengl.GLES20.glReadPixels;
-import static android.opengl.GLES20.glRenderbufferStorage;
-
 import java.io.IOException;
 import java.nio.IntBuffer;
 
-import javax.microedition.khronos.opengles.GL10;
-
+import android.util.Log;
 import android.view.KeyEvent;
 
 import com.lkf.hallowelt.controllers.CameraController;
@@ -62,6 +59,7 @@ public class CameraView extends LKFScreen
 	private int screenHeight;
 	private float pastTimeForSaving;
 	private boolean clearInitFlag;
+	private boolean boardInitFlag;
 	
 	public CameraView(CameraController controller, float width, float height, float focalLength)
 	{
@@ -94,9 +92,9 @@ public class CameraView extends LKFScreen
 		theReadPixels = new int[screenWidth * screenHeight];
 		theBoardSaving = new Texture(screenWidth, screenHeight);
 		
-		
 		extraExecuteFlag = true;
 		clearInitFlag = true;
+		boardInitFlag = false;
 		pastTimeForSaving = 0f;
 	}
 
@@ -144,7 +142,7 @@ public class CameraView extends LKFScreen
 	public void update(float deltaTime)
 	{
 		super.update(deltaTime);
-		if (extraExecuteFlag)
+		if (ScreenPen.needDraw() && extraExecuteFlag)
 		{
 			ScreenPen.drawProcess();
 		}
@@ -204,10 +202,13 @@ public class CameraView extends LKFScreen
 			clearInitFlag = false;
 		}
 		
-		theController.textureRenderInit();
-		theBatcher.beginBatch(theBoardSaving);
-		theBatcher.drawBackground();
-		theBatcher.endBatch();
+		if (boardInitFlag)
+		{
+			theController.textureRenderInit();
+			theBatcher.beginBatch(theBoardSaving);
+			theBatcher.drawRecord();;
+			theBatcher.endBatch();
+		}
 		
 		if (ScreenPen.needDraw())
 		{
@@ -217,9 +218,13 @@ public class CameraView extends LKFScreen
 		}
 		if (ScreenPen.needRecord() || pastTimeForSaving > 0.5f)
 		{
+			Log.v("hehe", "fuck");
 			theBoradBuffer.position(0);
 			glReadPixels(0, 0, screenWidth, screenHeight, GL_RGBA, GL_UNSIGNED_BYTE, theBoradBuffer);
+			theBoardSaving.load(theBoradBuffer);
 			pastTimeForSaving = 0f;
+			boardInitFlag = true;
+			ScreenPen.saveProcess();
 		}
 		
 		
