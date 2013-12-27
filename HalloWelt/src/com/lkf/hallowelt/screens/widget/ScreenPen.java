@@ -3,6 +3,7 @@ package com.lkf.hallowelt.screens.widget;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.lkf.lib.base.Pool;
@@ -48,14 +49,6 @@ public class ScreenPen
 	{
 		IDs.add(finger.getID());
 		Pens.put(finger.getID(), PenPool.newObject());
-/*		if (Pens.get(finger.getID()) == null)
-		{
-			Pens.put(finger.getID(), PenPool.newObject());
-		}
-		else 
-		{
-			Pens.get(finger.getID()).init();
-		}*/
 		Pens.get(finger.getID()).addPointFromTouch(finger.getPosition());
 	}
 	
@@ -69,6 +62,7 @@ public class ScreenPen
 		Pens.get(finger.getID()).addPointFromTouch(finger.getPosition());
 		Pens.get(finger.getID()).state = PenState.Dead;
 		recordFlag = true;
+		Log.v("hehe", "yes");
 	}
 	
 	public static boolean needDraw()
@@ -121,13 +115,18 @@ public class ScreenPen
 				pen.state = PenState.Init;
 				PenPool.free(pen);
 				Pens.remove(penID);
-				IDs.remove(penID);
+				deleteIDs.add(penID);
 			}
 			else 
 			{
 				pen.spilt();
 			}
 		}
+		for (Integer penID : deleteIDs)
+		{
+			IDs.remove(penID);
+		}
+		deleteIDs.clear();
 		recordFlag = false;
 	}
 	
