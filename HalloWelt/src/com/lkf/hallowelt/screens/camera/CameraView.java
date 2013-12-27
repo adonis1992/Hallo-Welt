@@ -1,6 +1,15 @@
 package com.lkf.hallowelt.screens.camera;
 
+import static android.opengl.GLES20.GL_RGBA;
+import static android.opengl.GLES20.GL_UNSIGNED_BYTE;
+import static android.opengl.GLES20.glReadPixels;
+import static android.opengl.GLES20.glRenderbufferStorage;
+
 import java.io.IOException;
+import java.nio.IntBuffer;
+
+import javax.microedition.khronos.opengles.GL10;
+
 import android.view.KeyEvent;
 
 import com.lkf.hallowelt.controllers.CameraController;
@@ -43,6 +52,17 @@ public class CameraView extends LKFScreen
 	private Sprite theBlue;
 	private Sprite theGreen;
 	
+	//Save members
+	private Texture theBoardSaving;
+	private IntBuffer theBoradBuffer;
+	private IntBuffer theClearBuffer;
+	private int[] theReadPixels;
+	
+	private int screenWidth;
+	private int screenHeight;
+	private float pastTimeForSaving;
+	private boolean clearInitFlag;
+	
 	public CameraView(CameraController controller, float width, float height, float focalLength)
 	{
 		super(width, height, focalLength); 
@@ -65,6 +85,19 @@ public class CameraView extends LKFScreen
 		theGreen = new Sprite(new Rectangle2D(270, 95, 20, 20));
 		
 		theColorBatcher = new ColorBatcher(controller);
+		
+		screenWidth = controller.getSurfaceView().getWidth();
+		screenHeight = controller.getSurfaceView().getHeight();
+		
+		theClearBuffer = IntBuffer.allocate(screenWidth * screenHeight);
+		theBoradBuffer = IntBuffer.allocate(screenWidth * screenHeight);
+		theReadPixels = new int[screenWidth * screenHeight];
+		theBoardSaving = new Texture(screenWidth, screenHeight);
+		
+		
+		extraExecuteFlag = true;
+		clearInitFlag = true;
+		pastTimeForSaving = 0f;
 	}
 
 	@Override
@@ -108,10 +141,14 @@ public class CameraView extends LKFScreen
 	}
 	
 	@Override
-	protected void laterCommunicateExecure()
+	public void update(float deltaTime)
 	{
-		ScreenPen.drawProcess();
-	}
+		super.update(deltaTime);
+		if (extraExecuteFlag)
+		{
+			ScreenPen.drawProcess();
+		}
+	};
 	
 	@Override
 	protected void textureLoad()
@@ -159,6 +196,34 @@ public class CameraView extends LKFScreen
 		matrixInit();
 		
 		alphaRenderInit();
+		
+		if (clearInitFlag)
+		{
+			theClearBuffer.position(0);
+			glReadPixels(0, 0, screenWidth, screenHeight, GL_RGBA, GL_UNSIGNED_BYTE, theClearBuffer);
+			clearInitFlag = false;
+		}
+		
+		theController.textureRenderInit();
+		theBatcher.beginBatch(theBoardSaving);
+		theBatcher.drawBackground();
+		theBatcher.endBatch();
+		
+		if (ScreenPen.needDraw())
+		{
+			theController.colorRenderInit();
+			ScreenPen.draw(theColorBatcher);
+			pastTimeForSaving += deltaTime;
+		}
+		if (ScreenPen.needRecord() || pastTimeForSaving > 0.5f)
+		{
+			theBoradBuffer.position(0);
+			glReadPixels(0, 0, screenWidth, screenHeight, GL_RGBA, GL_UNSIGNED_BYTE, theBoradBuffer);
+			pastTimeForSaving = 0f;
+		}
+		
+		
+		
 		theController.textureRenderInit();
 		theBatcher.beginBatch(theComponentsAtlas);
 		theBatcher.drawSprite(theBack);
@@ -177,9 +242,7 @@ public class CameraView extends LKFScreen
 		theBatcher.drawSprite(theBlue);
 		theBatcher.drawSprite(theGreen);
 		theBatcher.endBatch();
-		
-		theController.colorRenderInit();
-		ScreenPen.draw(theColorBatcher);
+
 //		ScreenPen.killLine();
 		
 	}

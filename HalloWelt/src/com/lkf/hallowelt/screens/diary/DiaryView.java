@@ -63,12 +63,6 @@ public class DiaryView extends LKFScreen
 		// TODO Auto-generated method stub
 
 	}
-	
-	@Override
-	protected void laterCommunicateExecure()
-	{
-		
-	}
 
 	@Override
 	protected void textureLoad()
