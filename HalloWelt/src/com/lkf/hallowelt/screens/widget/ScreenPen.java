@@ -24,7 +24,7 @@ public class ScreenPen
 	private static boolean recordFlag;
 	
 	private static Pool<ScreenPen> PenPool;
-//	private static HashSet<Integer> deleteIDs = new HashSet<Integer>();
+	private static HashSet<Integer> deleteIDs = new HashSet<Integer>();
 	private static HashSet<Integer> IDs = new HashSet<Integer>();
 	private static SparseArray<ScreenPen> Pens = new SparseArray<ScreenPen>();
 	
@@ -115,13 +115,17 @@ public class ScreenPen
 		for (Integer penID : IDs)
 		{
 			ScreenPen pen = Pens.get(penID);
-			pen.pointsClear();
 			if (pen.state == PenState.Finish)
 			{
+				pen.pointsClear();
 				pen.state = PenState.Init;
 				PenPool.free(pen);
 				Pens.remove(penID);
 				IDs.remove(penID);
+			}
+			else 
+			{
+				pen.spilt();
 			}
 		}
 		recordFlag = false;
@@ -154,6 +158,17 @@ public class ScreenPen
 		theWidths.clear();
 		
 		drawFlag = false;
+	}
+	
+	private void spilt()
+	{
+		Vector2D point = theDrawPoints.get(theDrawPoints.size() - 1);
+		Vector2D pointLeft = theWidths.get(theWidths.size() - 2);
+		Vector2D pointRight = theWidths.get(theWidths.size() - 1);
+		pointsClear();
+		theDrawPoints.add(point);
+		theWidths.add(pointLeft);
+		theWidths.add(pointRight);
 	}
 	
 	public boolean getInit()

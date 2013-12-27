@@ -206,7 +206,8 @@ public class CameraView extends LKFScreen
 		{
 			theController.textureRenderInit();
 			theBatcher.beginBatch(theBoardSaving);
-			theBatcher.drawRecord();;
+			theBatcher.drawRecord();
+//			theBatcher.drawBackground();
 			theBatcher.endBatch();
 		}
 		
