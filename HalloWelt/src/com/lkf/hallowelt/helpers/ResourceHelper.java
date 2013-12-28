@@ -10,6 +10,6 @@ public class ResourceHelper
 {
 	//Application Resource
 	public static final String EXTERNAL_STORAGE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath()
-			+ File.separator + "HalloWelt" + File.separator;
+			+ File.separator + "HalloWelt";
 	public static final CoordinateHelper COORDINATE_HELPER = CoordinateHelper.getHelper(360, 640);
 }

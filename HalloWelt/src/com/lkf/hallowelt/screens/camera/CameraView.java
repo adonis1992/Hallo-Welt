@@ -3,13 +3,19 @@ package com.lkf.hallowelt.screens.camera;
 import static android.opengl.GLES20.GL_RGBA;
 import static android.opengl.GLES20.GL_UNSIGNED_BYTE;
 import static android.opengl.GLES20.glReadPixels;
+
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.IntBuffer;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Bitmap.CompressFormat;
 import android.util.Log;
 import android.view.KeyEvent;
 
 import com.lkf.hallowelt.controllers.CameraController;
+import com.lkf.hallowelt.helpers.ResourceHelper;
 import com.lkf.hallowelt.screens.widget.ScreenPen;
 import com.lkf.lib.base.LKFController;
 import com.lkf.lib.base.LKFScreen;
@@ -192,7 +198,6 @@ public class CameraView extends LKFScreen
 	{
 		// TODO Auto-generated method stub
 		matrixInit();
-		
 		alphaRenderInit();
 		
 		if (clearInitFlag)
@@ -207,7 +212,6 @@ public class CameraView extends LKFScreen
 			theController.textureRenderInit();
 			theBatcher.beginBatch(theBoardSaving);
 			theBatcher.drawRecord();
-//			theBatcher.drawBackground();
 			theBatcher.endBatch();
 		}
 		
@@ -219,16 +223,14 @@ public class CameraView extends LKFScreen
 		}
 		if (ScreenPen.needRecord() || pastTimeForSaving > 0.5f)
 		{
-			Log.v("hehe", "fuck");
 			theBoradBuffer.position(0);
 			glReadPixels(0, 0, screenWidth, screenHeight, GL_RGBA, GL_UNSIGNED_BYTE, theBoradBuffer);
 			theBoardSaving.load(theBoradBuffer);
 			pastTimeForSaving = 0f;
 			boardInitFlag = true;
 			ScreenPen.saveProcess();
+			new Thread(new writeSaveThread()).start();
 		}
-		
-		
 		
 		theController.textureRenderInit();
 		theBatcher.beginBatch(theComponentsAtlas);
@@ -274,4 +276,25 @@ public class CameraView extends LKFScreen
 		return theController;
 	}
 
+	private class writeSaveThread implements Runnable
+	{	
+		@Override
+		public void run()
+		{
+			// TODO Auto-generated method stub
+			theBoradBuffer.get(theReadPixels);
+			Bitmap save = Bitmap.createBitmap(theReadPixels, screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
+			try
+			{
+				FileOutputStream photoPosition = (FileOutputStream) theController.write("test/"+ System.currentTimeMillis() + ".png");
+				save.compress(CompressFormat.PNG, 100, photoPosition);
+				Log.v("hehe", "fuck");
+			} 
+			catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				Log.v("SaveError", e.getMessage());
+			}
+		}
+	}
 }
