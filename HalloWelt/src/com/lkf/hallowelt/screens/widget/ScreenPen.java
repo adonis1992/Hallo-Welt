@@ -3,7 +3,6 @@ package com.lkf.hallowelt.screens.widget;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.lkf.lib.base.Pool;
@@ -62,7 +61,6 @@ public class ScreenPen
 		Pens.get(finger.getID()).addPointFromTouch(finger.getPosition());
 		Pens.get(finger.getID()).state = PenState.Dead;
 		recordFlag = true;
-		Log.v("hehe", "yes");
 	}
 	
 	public static boolean needDraw()
@@ -82,7 +80,16 @@ public class ScreenPen
 			ScreenPen pen = Pens.get(penID);
 			if (pen.drawFlag)
 			{
-				theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true);
+				if (pen.state == PenState.Initialized)
+				{
+					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true);
+					pen.state = PenState.Normal;
+				}
+				else 
+				{
+					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, false);
+				}
+				
 			}	
 		}
 	}
@@ -138,6 +145,8 @@ public class ScreenPen
 	private float lineT;
 	private PenState state;
 	private boolean drawFlag;
+	private boolean startFlag;
+	private boolean endFlag;
 	
 	private ScreenPen()
 	{
@@ -181,7 +190,7 @@ public class ScreenPen
 		{
 			currentPoint.set(touchPosition);
 			theGetPoints.add(touchPosition.copy());
-			state = PenState.Normal;
+			state = PenState.Initialized;
 		}
 		else if	(touchPosition.copy().sub(currentPoint).length() > 2 * INTERVAL)
 		{
@@ -349,6 +358,8 @@ public class ScreenPen
 			}
 			}
 		}
+		
+		drawFlag = true;
 		theGetPoints.clear();
 		lineT = -1;
 	}

@@ -229,7 +229,7 @@ public class CameraView extends LKFScreen
 			pastTimeForSaving = 0f;
 			boardInitFlag = true;
 			ScreenPen.saveProcess();
-			new Thread(new writeSaveThread()).start();
+//			new Thread(new writeSaveThread()).start();
 		}
 		
 		theController.textureRenderInit();
@@ -250,9 +250,6 @@ public class CameraView extends LKFScreen
 		theBatcher.drawSprite(theBlue);
 		theBatcher.drawSprite(theGreen);
 		theBatcher.endBatch();
-
-//		ScreenPen.killLine();
-		
 	}
 
 	@Override
