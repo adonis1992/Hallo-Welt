@@ -42,7 +42,6 @@ public class CameraView extends LKFScreen
 	
 	//Communicate Members
 	private Sprite theBack;
-	private Sprite theFilter;
 	private Sprite theCamera;
 	private Sprite thePencil;
 	private Sprite theBrushback;
@@ -75,12 +74,11 @@ public class CameraView extends LKFScreen
 		
 		theBatcher = new SpriteBatcher(14, controller);
 		theBack = new Sprite(new Rectangle2D(0, 0, 360, 73));
-		theFilter = new Sprite(new Rectangle2D(20, 8, 56, 57));
 		theCamera = new Sprite(new Rectangle2D(140, 5, 76, 60));
 		thePencil = new Sprite(new Rectangle2D(285, 9, 56, 56));
 		theBrushback = new Sprite(new Rectangle2D(0, 73, 360, 73));
-		theBin = new Sprite(new Rectangle2D(10, 80, 42, 50));
-		theEraser = new Sprite(new Rectangle2D(300, 80, 54, 52));
+		theBin = new Sprite(new Rectangle2D(10, 8, 42, 50));
+		theEraser = new Sprite(new Rectangle2D(55, 8, 54, 52));
 		theBlack = new Sprite(new Rectangle2D(70, 95, 20, 20));
 		theWhite = new Sprite(new Rectangle2D(110, 95, 20, 20));
 		theRed = new Sprite(new Rectangle2D(150, 95, 20, 20));
@@ -176,14 +174,13 @@ public class CameraView extends LKFScreen
 		// TODO Auto-generated method stub
 		TextureRegion.textureLoad(theComponentsAtlas);
 		theBack.setTexture(new TextureRegion(0, 0, 360, 73));
-		theFilter.setTexture(new TextureRegion(20, 135, 56, 57));
+		theBin.setTexture(new TextureRegion(0, 80, 42, 50));
+		theEraser.setTexture(new TextureRegion(60, 80, 54, 52));
 		theCamera.setTexture(new TextureRegion(100, 135, 76, 60));
 		thePencil.setTexture(new TextureRegion(200, 135, 56, 56));
 		TextureRegion.dispose();
 		TextureRegion.textureLoad(theBrushtoolAtlas);
 		theBrushback.setTexture(new TextureRegion(0, 0, 360, 73));
-		theBin.setTexture(new TextureRegion(0, 80, 42, 50));
-		theEraser.setTexture(new TextureRegion(60, 80, 54, 52));
 		theBlack.setTexture(new TextureRegion(120, 80, 20, 20));
 		theWhite.setTexture(new TextureRegion(149, 80, 20, 20));
 		theRed.setTexture(new TextureRegion(179, 80, 20, 20));
@@ -235,14 +232,13 @@ public class CameraView extends LKFScreen
 		theController.textureRenderInit();
 		theBatcher.beginBatch(theComponentsAtlas);
 		theBatcher.drawSprite(theBack);
-		theBatcher.drawSprite(theFilter);
+		theBatcher.drawSprite(theBin);
+		theBatcher.drawSprite(theEraser);
 		theBatcher.drawSprite(theCamera);
 		theBatcher.drawSprite(thePencil);
 		theBatcher.endBatch();
 		theBatcher.beginBatch(theBrushtoolAtlas);
 		theBatcher.drawSprite(theBrushback);
-		theBatcher.drawSprite(theBin);
-		theBatcher.drawSprite(theEraser);
 		theBatcher.drawSprite(theBlack);
 		theBatcher.drawSprite(theWhite);
 		theBatcher.drawSprite(theRed);

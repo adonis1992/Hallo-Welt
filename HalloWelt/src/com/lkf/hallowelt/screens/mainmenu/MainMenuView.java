@@ -31,7 +31,7 @@ public class MainMenuView extends LKFScreen
 	private Sprite theWindow;
 	private Sprite theMap;
 	private Sprite theBookcase;
-	private Sprite theSetting;
+	private Sprite theHelp;
 	
 	private int delay = 50;
 	
@@ -42,10 +42,10 @@ public class MainMenuView extends LKFScreen
 		theController = controller;
 		
 		theBatcher = new SpriteBatcher(5, controller);
-		theWindow = new Sprite(new Rectangle2D(0, 285, 130, 205));
-		theMap = new Sprite(new Rectangle2D(160, 500, 168, 120));
-		theBookcase = new Sprite(new Rectangle2D(160, 60, 200, 380));
-        theSetting = new Sprite(new Rectangle2D(0, 104, 136, 136));
+		theWindow = new Sprite(new Rectangle2D(10, 250, 140, 215));
+		theMap = new Sprite(new Rectangle2D(170, 440, 170, 125));
+		theBookcase = new Sprite(new Rectangle2D(150, 65, 210, 320));
+        theHelp = new Sprite(new Rectangle2D(20, 25, 130, 120));
 	}
 
 	@Override
@@ -76,9 +76,9 @@ public class MainMenuView extends LKFScreen
 		{
 			moveCamera(theBookcase.getPosition().getCenter(), theBookcase.getPosition().width, delay);
 		}
-		else if (theSetting.touchCheck(finger.getPosition()))
+		else if (theHelp.touchCheck(finger.getPosition()))
 		{
-			moveCamera(theSetting.getPosition().getCenter(), theSetting.getPosition().width, delay);
+			moveCamera(theHelp.getPosition().getCenter(), theHelp.getPosition().width, delay);
 		}
 	}
 
@@ -127,10 +127,10 @@ public class MainMenuView extends LKFScreen
 	{
 		// TODO Auto-generated method stub
 		TextureRegion.textureLoad(theComponentsAtlas);
-		theWindow.setTexture(new TextureRegion(0, 150, 130, 205));
-		theMap.setTexture(new TextureRegion(160, 0, 168, 120));
-		theBookcase.setTexture(new TextureRegion(160, 200, 200, 380));
-        theSetting.setTexture(new TextureRegion(0, 400, 136, 136));
+		theWindow.setTexture(new TextureRegion(10, 150, 140, 215));
+		theMap.setTexture(new TextureRegion(170, 50, 170, 125));
+		theBookcase.setTexture(new TextureRegion(150, 230, 210, 320));
+        theHelp.setTexture(new TextureRegion(20, 470, 130, 120));
 		TextureRegion.dispose();
 	}
 
@@ -149,7 +149,7 @@ public class MainMenuView extends LKFScreen
 		theBatcher.drawSprite(theWindow);
 		theBatcher.drawSprite(theMap);
 		theBatcher.drawSprite(theBookcase);
-		theBatcher.drawSprite(theSetting);
+		theBatcher.drawSprite(theHelp);
 		theBatcher.endBatch();
 	}
 
