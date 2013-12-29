@@ -81,7 +81,6 @@ public class ScreenPen
 			if (pen.drawFlag)
 			{
 				theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, pen.startFlag, pen.endFlag);
-				pen.startFlag = false;
 			}	
 		}
 	}
@@ -173,6 +172,7 @@ public class ScreenPen
 		theDrawPoints.add(point);
 		theWidths.add(pointLeft);
 		theWidths.add(pointRight);
+		startFlag = false;
 	}
 	
 	public boolean getInit()
