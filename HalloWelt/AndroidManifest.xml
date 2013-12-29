@@ -36,17 +36,17 @@
             android:name="com.lkf.hallowelt.controllers.CameraController"
             android:screenOrientation="portrait"
             android:configChanges="keyboard|keyboardHidden|orientation">
-            
-        </activity>
-        <activity 
-            android:name="com.lkf.hallowelt.controllers.MapController"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboard|keyboardHidden|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity 
+            android:name="com.lkf.hallowelt.controllers.MapController"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboard|keyboardHidden|orientation">
+            
         </activity>
         
          <meta-data
