@@ -80,16 +80,8 @@ public class ScreenPen
 			ScreenPen pen = Pens.get(penID);
 			if (pen.drawFlag)
 			{
-				if (pen.state == PenState.Initialized)
-				{
-					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, true);
-					pen.state = PenState.Normal;
-				}
-				else 
-				{
-					theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, false);
-				}
-				
+				theColorBatcher.draw(pen.theDrawPoints, pen.theWidths, pen.startFlag, pen.endFlag);
+				pen.startFlag = false;
 			}	
 		}
 	}
@@ -120,6 +112,8 @@ public class ScreenPen
 			{
 				pen.pointsClear();
 				pen.state = PenState.Init;
+				pen.startFlag = true;
+				pen.endFlag = false;
 				PenPool.free(pen);
 				Pens.remove(penID);
 				deleteIDs.add(penID);
@@ -157,6 +151,8 @@ public class ScreenPen
 		currentPoint = new Vector2D();
 		lineT = -1;
 		drawFlag = false;
+		startFlag = true;
+		endFlag = false;
 		state = PenState.Init;
 	}
 	
@@ -190,7 +186,7 @@ public class ScreenPen
 		{
 			currentPoint.set(touchPosition);
 			theGetPoints.add(touchPosition.copy());
-			state = PenState.Initialized;
+			state = PenState.Normal;
 		}
 		else if	(touchPosition.copy().sub(currentPoint).length() > 2 * INTERVAL)
 		{
@@ -245,6 +241,8 @@ public class ScreenPen
 	{
 		Vector2D formerLine;//Lines!!!!		
 		int pointsNumber = theGetPoints.size();
+		
+		endFlag = true;
 		
 		if (theDrawPoints.size() == 0)
 		{
