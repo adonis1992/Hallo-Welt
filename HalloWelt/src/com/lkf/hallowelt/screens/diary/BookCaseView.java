@@ -1,5 +1,6 @@
 package com.lkf.hallowelt.screens.diary;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -46,8 +47,8 @@ public class BookCaseView extends LKFScreen
 		theCases = new ArrayList<Sprite>();
 		theBooks = new ArrayList<LongPressSprite>();
 		theBookIDs = new ArrayList<Integer>();
-		plusMark = new Sprite(null);//你来加大小
-		deleteMark = new Sprite(null);//加大小
+		plusMark = new Sprite(new Rectangle2D(40, 310, 44, 44));
+		deleteMark = new Sprite(new Rectangle2D(40, 310, 31, 34));
 		
 		Cursor cursor = controller.getDatabaseHelper().getDiary(); 
 		int bookNumber = cursor.getCount();
@@ -61,7 +62,7 @@ public class BookCaseView extends LKFScreen
 		}
 		for (int current = 0; current < rowNumber; current++)
 		{
-//			theCases.add(new Sprite(getCasePosition(current)));
+ 			theCases.add(new Sprite(getCasePosition(current)));
 		}
 		for (int current = 0; current < bookNumber; current++)
 		{
@@ -71,15 +72,17 @@ public class BookCaseView extends LKFScreen
 		}
 	}
 	
-/*	private Rectangle2D getCasePosition(int row)
+ 	private Rectangle2D getCasePosition(int row)
 	{
-		float positionY = xxx + xxx * row;
-		return new Rectangle2D(xxx, positionY, xxx, xxx);//剩下数据你填
-	}*/
+		float positionY = 136 + 136 * row;
+		return new Rectangle2D(0, positionY, 360, 136);
+	}
 	
 	private Rectangle2D getBookPosition(int order)
 	{
-		return null;
+		float positionX = 20 + 118 * ( (order + 2) % 3 );
+		float positionY = 123 * ( (order + 2) / 3 );
+		return new Rectangle2D(positionX, positionY, 360, 136);
 	}
 	
 	@Override
@@ -135,6 +138,15 @@ public class BookCaseView extends LKFScreen
 	protected void textureLoad()
 	{
 		// TODO Auto-generated method stub
+		try
+		{
+			theDiaryAtlas = new Texture(theController.readAssetFile("Bookcase.png"));
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -145,14 +157,14 @@ public class BookCaseView extends LKFScreen
 		TextureRegion.textureLoad(theDiaryAtlas);
 		for (Sprite theCase : theCases)
 		{
-			theCase.setTexture(null); //xieshang
+			theCase.setTexture(new TextureRegion(0, 0, 360, 136));
 		}
 		for (LongPressSprite theBook : theBooks)
 		{
-			theBook.setTexture(null);//xieshang
+			theBook.setTexture(new TextureRegion(0, 140, 84, 110));
 		}
-		plusMark.setTexture(null);//xieshang
-		deleteMark.setTexture(null);//xieshang
+		plusMark.setTexture(new TextureRegion(0, 260, 44, 44));
+		deleteMark.setTexture(new TextureRegion(120, 260, 31, 34));
 		TextureRegion.dispose();
 	}
 
