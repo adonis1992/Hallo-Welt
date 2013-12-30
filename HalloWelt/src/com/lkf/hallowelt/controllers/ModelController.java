@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import android.os.Bundle;
+
+import com.lkf.hallowelt.helpers.DatabaseHelper;
 import com.lkf.hallowelt.helpers.ResourceHelper;
 import com.lkf.lib.base.LKFController;
 import com.lkf.lib.helpers.CoordinateHelper;
@@ -23,6 +26,8 @@ public abstract class ModelController extends LKFController
 			new File(ResourceHelper.EXTERNAL_STORAGE_PATH + File.separator + "writings").mkdir();
 		}
 	}
+	
+	private DatabaseHelper databaseHelper;
 	
 	@Override
 	protected InputStream readFile(String filePath) throws IOException
@@ -48,5 +53,18 @@ public abstract class ModelController extends LKFController
 	public CoordinateHelper getCoordinateHelper()
 	{
 		return ResourceHelper.COORDINATE_HELPER;
+	}
+	
+	public DatabaseHelper getDatabaseHelper()
+	{
+		return databaseHelper;
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		databaseHelper = new DatabaseHelper(this);
 	}
 }
