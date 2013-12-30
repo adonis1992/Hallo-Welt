@@ -39,6 +39,7 @@ public class DiaryView extends LKFScreen
 	private Sprite theBin;
 	private Sprite theBack;
 	private Sprite theForward;
+	private Sprite theDelete;
 	
 	private ToggleSprite thePencils;
 	private Sprite thePencilsclk;
@@ -73,6 +74,7 @@ public class DiaryView extends LKFScreen
 		theBin = new Sprite(new Rectangle2D(0, 135, 70, 70));
 		theBack = new Sprite(new Rectangle2D(30, 21, 43, 39));
 		theForward = new Sprite(new Rectangle2D(287, 21, 43, 39));
+		//theDelete = new Sprite(new Rectangle2D(30, 21, 31, 34));
 		
 		thePencils = new ToggleSprite(new Rectangle2D(0, 435, 70, 70));
 		thePencilsclk = new Sprite(new Rectangle2D(0, 435, 70, 70));
@@ -166,6 +168,7 @@ public class DiaryView extends LKFScreen
 		theBin.setTexture(new TextureRegion(70, 500, 70, 70));
 		theBack.setTexture(new TextureRegion(140, 531, 43, 39));
 		theForward.setTexture(new TextureRegion(210, 461, 43, 39));
+		theDelete.setTexture(new TextureRegion(120, 260, 31, 34));
 		
 		thePencils.setTexture(new TextureRegion(140, 570, 70, 70));
 		thePencilsclk.setTexture(new TextureRegion(140, 570, 70, 70));
@@ -209,6 +212,7 @@ public class DiaryView extends LKFScreen
 		
 		theBatcher.drawSprite(theBack);
 		theBatcher.drawSprite(theForward);
+		theBatcher.drawSprite(theDelete);
 		
 		theBatcher.drawSprite(thePencils);
 		theBatcher.drawSprite(thePencilsclk);

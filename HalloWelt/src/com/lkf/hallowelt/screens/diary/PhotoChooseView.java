@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.view.KeyEvent;
 
 import com.lkf.hallowelt.controllers.DiaryController;
+import com.lkf.hallowelt.screens.camera.Rectangle2D;
+import com.lkf.hallowelt.screens.camera.TextureRegion;
 import com.lkf.lib.base.LKFController;
 import com.lkf.lib.base.LKFScreen;
 import com.lkf.lib.base.framework.InputBase.LKFKeyEvent;
@@ -29,6 +31,7 @@ public class PhotoChooseView extends LKFScreen
 	private Sprite forward;
 	private Sprite backward;
 	private Sprite confirm;
+	private Sprite background;
 	
 	private boolean canForward;
 	private boolean canBackward;
@@ -44,6 +47,10 @@ public class PhotoChooseView extends LKFScreen
 		// TODO Auto-generated constructor stub
 		theController = controller;
 		theBatcher = new SpriteBatcher(5, controller);
+		forward = new Sprite(new Rectangle2D(287, 11, 43, 39));
+		backward = new Sprite(new Rectangle2D(20, 11, 43, 39));
+		confirm = new Sprite(new Rectangle2D(155, 11, 51, 39));
+		background = new Sprite(new Rectangle2D(0, 0, 360, 60));
 	}
 
 	@Override
@@ -184,6 +191,12 @@ public class PhotoChooseView extends LKFScreen
 	protected void textureRegionInit()
 	{
 		// TODO Auto-generated method stub
+		TextureRegion.textureLoad(theComponentsAtlas);
+		forward.setTexture(new TextureRegion(100, 511, 43, 39));
+		backward.setTexture(new TextureRegion(100, 461, 43, 39));
+		confirm.setTexture(new TextureRegion(300, 461, 51, 39));
+		background.setTexture(new TextureRegion(0, 580, 360, 60));
+		TextureRegion.dispose();
 
 	}
 
