@@ -14,6 +14,7 @@ import com.lkf.lib.render.Sprite;
 import com.lkf.lib.render.SpriteBatcher;
 import com.lkf.lib.render.Texture;
 import com.lkf.lib.render.TextureRegion;
+import com.lkf.lib.render.ToggleSprite;
 
 public class DiaryView extends LKFScreen
 {
@@ -28,33 +29,32 @@ public class DiaryView extends LKFScreen
 	private ArrayList<Texture> thePhotos;
 	
 	//Communicate Members
-	private Sprite thePencil;
+	private ToggleSprite thePencil;
 	private Sprite thePencilclk;
-	private Sprite theEraser;
+	private ToggleSprite theEraser;
 	private Sprite theEraserclk;
+	
 	private Sprite thePhoto;
 	private Sprite theText;
 	private Sprite theBin;
 	private Sprite theBack;
-	private Sprite theBackclk;
 	private Sprite theForward;
-	private Sprite theForwardclk;
 	
-	private Sprite thePencils;
+	private ToggleSprite thePencils;
 	private Sprite thePencilsclk;
-	private Sprite theErasers;
+	private ToggleSprite theErasers;
 	private Sprite theErasersclk;
-	private Sprite theBlack;
+	private ToggleSprite theBlack;
 	private Sprite theBlackclk;
-	private Sprite theWhite;
+	private ToggleSprite theWhite;
 	private Sprite theWhiteclk;
-	private Sprite theRed;
+	private ToggleSprite theRed;
 	private Sprite theRedclk;
-	private Sprite theYellow;
+	private ToggleSprite theYellow;
 	private Sprite theYellowclk;
-	private Sprite theBlue;
+	private ToggleSprite theBlue;
 	private Sprite theBlueclk;
-	private Sprite theGreen;
+	private ToggleSprite theGreen;
 	private Sprite theGreenclk;
 	
 	public DiaryView(DiaryController controller, float width, float height, float focalLength)
@@ -64,33 +64,31 @@ public class DiaryView extends LKFScreen
         theController = controller;
 		
 		theBatcher = new SpriteBatcher(5, controller);
-		thePencil = new Sprite(new Rectangle2D(0, 435, 70, 70));
+		thePencil = new ToggleSprite(new Rectangle2D(0, 435, 70, 70));
 		thePencilclk = new Sprite(new Rectangle2D(0, 435, 70, 70)); // Click on
-		theEraser = new Sprite(new Rectangle2D(0, 360, 70, 70));
+		theEraser = new ToggleSprite(new Rectangle2D(0, 360, 70, 70));
 		theEraserclk = new Sprite(new Rectangle2D(0, 360, 70, 70)); // Click on
 		thePhoto = new Sprite(new Rectangle2D(0, 290, 70, 70));
 		theText = new Sprite(new Rectangle2D(0, 215, 70, 70));
 		theBin = new Sprite(new Rectangle2D(0, 135, 70, 70));
 		theBack = new Sprite(new Rectangle2D(30, 21, 43, 39));
-		theBackclk = new Sprite(new Rectangle2D(30, 21, 43, 39)); // Click on
 		theForward = new Sprite(new Rectangle2D(287, 21, 43, 39));
-		theForwardclk = new Sprite(new Rectangle2D(287, 21, 43, 39)); // Click on
 		
-		thePencils = new Sprite(new Rectangle2D(0, 435, 70, 70));
+		thePencils = new ToggleSprite(new Rectangle2D(0, 435, 70, 70));
 		thePencilsclk = new Sprite(new Rectangle2D(0, 435, 70, 70));
-		theErasers = new Sprite(new Rectangle2D(0, 135, 70, 70));
+		theErasers = new ToggleSprite(new Rectangle2D(0, 135, 70, 70));
 		theErasersclk = new Sprite(new Rectangle2D(0, 135, 70, 70));
-		theBlack = new Sprite(new Rectangle2D(0, 360, 70, 70));
+		theBlack = new ToggleSprite(new Rectangle2D(0, 360, 70, 70));
 		theBlackclk = new Sprite(new Rectangle2D(0, 360, 70, 70));
-		theWhite = new Sprite(new Rectangle2D(15, 370, 20, 20));
+		theWhite = new ToggleSprite(new Rectangle2D(15, 370, 20, 20));
 		theWhiteclk = new Sprite(new Rectangle2D(15, 370, 20, 20));
-		theRed = new Sprite(new Rectangle2D(15, 330, 20, 20));
+		theRed = new ToggleSprite(new Rectangle2D(15, 330, 20, 20));
 		theRedclk = new Sprite(new Rectangle2D(15, 330, 20, 20));
-		theYellow = new Sprite(new Rectangle2D(15, 290, 20, 20));
+		theYellow = new ToggleSprite(new Rectangle2D(15, 290, 20, 20));
 		theYellowclk = new Sprite(new Rectangle2D(15, 290, 20, 20));
-		theBlue = new Sprite(new Rectangle2D(15, 250, 20, 20));
+		theBlue = new ToggleSprite(new Rectangle2D(15, 250, 20, 20));
 		theBlueclk = new Sprite(new Rectangle2D(15, 250, 20, 20));
-		theGreen = new Sprite(new Rectangle2D(15, 210, 20, 20));
+		theGreen = new ToggleSprite(new Rectangle2D(15, 210, 20, 20));
 		theGreenclk = new Sprite(new Rectangle2D(15, 210, 20, 20));
 
 	}
@@ -167,9 +165,7 @@ public class DiaryView extends LKFScreen
 		theText.setTexture(new TextureRegion(70, 570, 70, 70));
 		theBin.setTexture(new TextureRegion(70, 500, 70, 70));
 		theBack.setTexture(new TextureRegion(140, 531, 43, 39));
-		theBackclk.setTexture(new TextureRegion(210, 531, 43, 39)); // Click on
 		theForward.setTexture(new TextureRegion(210, 461, 43, 39));
-		theForwardclk.setTexture(new TextureRegion(140, 461, 43, 39)); // Click on
 		
 		thePencils.setTexture(new TextureRegion(140, 570, 70, 70));
 		thePencilsclk.setTexture(new TextureRegion(140, 570, 70, 70));
@@ -210,10 +206,9 @@ public class DiaryView extends LKFScreen
 		theBatcher.drawSprite(thePhoto);
 		theBatcher.drawSprite(theText);
 		theBatcher.drawSprite(theBin);
+		
 		theBatcher.drawSprite(theBack);
-		theBatcher.drawSprite(theBackclk);
 		theBatcher.drawSprite(theForward);
-		theBatcher.drawSprite(theForwardclk);
 		
 		theBatcher.drawSprite(thePencils);
 		theBatcher.drawSprite(thePencilsclk);
