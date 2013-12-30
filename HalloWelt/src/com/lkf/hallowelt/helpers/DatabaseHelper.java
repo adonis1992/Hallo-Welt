@@ -88,6 +88,11 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		database.insert(TABLE_DIARY, null, theValues);
 	}
 	
+	public Cursor getDiary()
+	{
+		return database.rawQuery("SELECT * FROM " + DIARY_INFORMATION, null);
+	}
+	
 	public Cursor getDiary(int diaryID)
 	{
 		return database.rawQuery("SELECT * FROM " + DIARY_INFORMATION + " WHERE id = " + diaryID, null);

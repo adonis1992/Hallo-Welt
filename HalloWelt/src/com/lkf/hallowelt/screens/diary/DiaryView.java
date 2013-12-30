@@ -1,6 +1,7 @@
 package com.lkf.hallowelt.screens.diary;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.lkf.hallowelt.controllers.DiaryController;
 import com.lkf.lib.base.LKFController;
@@ -24,6 +25,7 @@ public class DiaryView extends LKFScreen
 	//Pictures
 	private Texture theDiaryAtlas;
 	private Texture theComponentsAtlas;
+	private ArrayList<Texture> thePhotos;
 	
 	//Communicate Members
 	private Sprite thePencil;
@@ -237,7 +239,7 @@ public class DiaryView extends LKFScreen
 	protected LKFController getController()
 	{
 		// TODO Auto-generated method stub
-		return null;
+		return theController;
 	}
 
 }
