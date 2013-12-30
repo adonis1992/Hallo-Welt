@@ -5,9 +5,17 @@ import com.lkf.lib.base.LKFController;
 import com.lkf.lib.base.LKFScreen;
 import com.lkf.lib.base.framework.InputBase.LKFKeyEvent;
 import com.lkf.lib.helpers.FingerHelper;
+import com.lkf.lib.render.SpriteBatcher;
+import com.lkf.lib.render.Texture;
 
 public class BookCaseView extends LKFScreen
 {
+	//Base Members.
+	private final DiaryController theController;
+	private SpriteBatcher theBatcher;
+	
+	//Pictures
+	private Texture theDiaryAtlas;
 
 	public BookCaseView(DiaryController controller, float width, float height, float focalLength)
 	{

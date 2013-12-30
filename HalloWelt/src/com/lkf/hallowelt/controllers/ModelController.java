@@ -19,7 +19,8 @@ public abstract class ModelController extends LKFController
 		if (!storage.exists())
 		{
 			storage.mkdir();
-			new File(ResourceHelper.EXTERNAL_STORAGE_PATH + File.separator + "test").mkdir();
+			new File(ResourceHelper.EXTERNAL_STORAGE_PATH + File.separator + "photos").mkdir();
+			new File(ResourceHelper.EXTERNAL_STORAGE_PATH + File.separator + "writings").mkdir();
 		}
 	}
 	

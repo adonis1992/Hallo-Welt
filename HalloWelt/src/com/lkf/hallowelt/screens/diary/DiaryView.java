@@ -3,17 +3,16 @@ package com.lkf.hallowelt.screens.diary;
 import java.io.IOException;
 
 import com.lkf.hallowelt.controllers.DiaryController;
-import com.lkf.hallowelt.controllers.MainMenuController;
-import com.lkf.hallowelt.screens.camera.ColorBatcher;
-import com.lkf.hallowelt.screens.mainmenu.Rectangle2D;
-import com.lkf.hallowelt.screens.mainmenu.Sprite;
-import com.lkf.hallowelt.screens.mainmenu.SpriteBatcher;
-import com.lkf.hallowelt.screens.mainmenu.Texture;
-import com.lkf.hallowelt.screens.mainmenu.TextureRegion;
 import com.lkf.lib.base.LKFController;
 import com.lkf.lib.base.LKFScreen;
 import com.lkf.lib.base.framework.InputBase.LKFKeyEvent;
 import com.lkf.lib.helpers.FingerHelper;
+import com.lkf.lib.physics.Rectangle2D;
+import com.lkf.lib.render.ColorBatcher;
+import com.lkf.lib.render.Sprite;
+import com.lkf.lib.render.SpriteBatcher;
+import com.lkf.lib.render.Texture;
+import com.lkf.lib.render.TextureRegion;
 
 public class DiaryView extends LKFScreen
 {
